@@ -5,7 +5,7 @@ import java.time.Instant;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import telran.lostfound.api.LostFoundDto;
+import telran.lostfound.api.RequestLostFoundDto;
 
 @Document(collection = "lostfounds")
 public class LostFoundEntity {
@@ -19,7 +19,7 @@ public class LostFoundEntity {
 	private String datePost;
 //	think about it
 	private String type;
-	private boolean sex;
+	private String sex;
 	private String breed;
 	private String[] tags;
 //	API photos
@@ -30,7 +30,7 @@ public class LostFoundEntity {
 		super();
 	}
 
-	public LostFoundEntity(LostFoundDto dto, boolean typePost, String login) {
+	public LostFoundEntity(RequestLostFoundDto dto, boolean typePost, String login) {
 		super();
 		this.typePost = typePost;
 		this.userLogin = login;
@@ -73,7 +73,7 @@ public class LostFoundEntity {
 		return type;
 	}
 
-	public boolean getSex() {
+	public String getSex() {
 		return sex;
 	}
 
@@ -121,7 +121,7 @@ public class LostFoundEntity {
 		this.type = type;
 	}
 
-	public void setSex(boolean sex) {
+	public void setSex(String sex) {
 		this.sex = sex;
 	}
 

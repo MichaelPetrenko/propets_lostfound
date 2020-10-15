@@ -3,7 +3,7 @@ package telran.lostfound.api;
 import telran.lostfound.domain.entities.Location;
 import telran.lostfound.domain.entities.LostFoundEntity;
 
-public class PostDto {
+public class ResponsePostDto {
 	
 	public String id;
 	public boolean typePost;
@@ -12,13 +12,13 @@ public class PostDto {
 	public String avatar;
 	public String datePost;	
 	public String type;
-	public boolean sex;
+	public String sex;
 	public String breed;
 	public String[] tags;
 	public String[] photos;
 	public Location location;
 	
-	public PostDto(LostFoundEntity ent) {
+	public ResponsePostDto(LostFoundEntity ent) {
 		super();
 		this.id = ent.getId();
 		this.typePost = ent.getTypePost();
@@ -34,7 +34,7 @@ public class PostDto {
 		this.location = ent.getLocation();
 	}
 	
-	public PostDto() {
+	public ResponsePostDto() {
 		super();
 	}
 	

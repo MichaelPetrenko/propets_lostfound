@@ -2,16 +2,16 @@ package telran.lostfound.api;
 
 import telran.lostfound.domain.entities.Location;
 
-public class GetPostsResponseDto {
+public class ResponseGetPostsDto {
 
 	public int itemsOnPage;
 	public int currentPage;
 	public int itemsTotal;
-	public PostDto[] posts;
+	public ResponsePostDto[] posts;
 	public String[] photos;
 	public Location location;
 	
-	public GetPostsResponseDto(int itemsOnPage, int currentPage, int itemsTotal, PostDto[] posts, String[] photos,
+	public ResponseGetPostsDto(int itemsOnPage, int currentPage, int itemsTotal, ResponsePostDto[] posts, String[] photos,
 			Location location) {
 		super();
 		this.itemsOnPage = itemsOnPage;
@@ -22,7 +22,7 @@ public class GetPostsResponseDto {
 		this.location = location;
 	}
 
-	public GetPostsResponseDto() {
+	public ResponseGetPostsDto() {
 		super();
 	}
 	

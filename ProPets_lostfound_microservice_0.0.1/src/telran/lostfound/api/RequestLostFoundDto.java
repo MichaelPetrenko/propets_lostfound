@@ -2,18 +2,18 @@ package telran.lostfound.api;
 
 import telran.lostfound.domain.entities.Location;
 
-public class LostFoundDto {
+public class RequestLostFoundDto {
 
 	public String userName;
 	public String avatar;
 	public String type;
-	public boolean sex;
+	public String sex;
 	public String breed;
 	public Location location;
 	public String[] photos;
 	public String[] tags;
 
-	public LostFoundDto(String userName, String avatar, String type, boolean sex, String breed, Location location,
+	public RequestLostFoundDto(String userName, String avatar, String type, String sex, String breed, Location location,
 			String[] photos, String[] tags) {
 		super();
 		this.userName = userName;
@@ -26,7 +26,7 @@ public class LostFoundDto {
 		this.tags = tags;
 	}
 
-	public LostFoundDto() {
+	public RequestLostFoundDto() {
 		super();
 	}
 
