@@ -1,5 +1,7 @@
 package telran.lostfound.service.interfaces;
 
+import java.util.ArrayList;
+
 import telran.lostfound.api.RequestLostFoundDto;
 import telran.lostfound.api.ResponsePostDto;
 import telran.lostfound.api.ResponseLostFoundDto;
@@ -7,12 +9,13 @@ import telran.lostfound.api.ResponseGetPostsDto;
 
 public interface ILostFoundManagement {
 	
-	ResponseLostFoundDto newLostOrFoundPet(RequestLostFoundDto dto, String login, boolean lostOrFound); //get ret x-token
-	ResponseLostFoundDto newFoundPet(RequestLostFoundDto dto); 											//get ret
-	ResponseGetPostsDto getPostsOfLostPets(int items, int currentPage);									// get ret
+	ResponseLostFoundDto newLostOrFoundPet(RequestLostFoundDto dto, String login, boolean lostOrFound); //D get ret x-token
+	ResponseGetPostsDto getPostsOfLostPets(int items, int currentPage);									//get ret
 	ResponseGetPostsDto getPostsOfFoundPets(int items, int currentPage);								//get ret
-	ResponsePostDto postById(String postID); 															//get ret
-	ResponsePostDto deletePostById(String postId);														//get ret
+	ResponsePostDto postById(String postID); 															//D get ret
+	ResponsePostDto deletePostById(String postId);														//D get ret
+	ResponsePostDto updatePost(RequestLostFoundDto dto, String postId);									//D get ret
+	ArrayList<ResponsePostDto> getUserDataListId(String[] posts);			//TODO FIXME TODO Location!!!!!!!!!!!!!!!!										//
 	
 	//=============================================================================
 	
@@ -23,13 +26,6 @@ public interface ILostFoundManagement {
 //			dto from Imaga,
 			int items, int currentPage);
 	
-	
-	
-	//update post get ret
-
-	
 	//tags and colors CONNECT TO API 
-	
-	//get user data ??? from another service: input _ID_ posts, out content posts by ID.
 			
 }

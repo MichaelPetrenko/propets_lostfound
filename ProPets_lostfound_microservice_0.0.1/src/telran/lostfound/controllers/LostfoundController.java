@@ -1,10 +1,13 @@
 package telran.lostfound.controllers;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -60,6 +63,18 @@ public class LostfoundController {
 	@DeleteMapping(value = LostFoundApiConstants.DELETE_POST_BY_ID)
 	ResponsePostDto deletePostById(@PathVariable("id") String id) {
 		return lostfound.deletePostById(id);
+	}
+	
+//	"/lostfound/en/v1/{id}"
+	@PutMapping(value = LostFoundApiConstants.UPDATE_POST_FOUND_LOST_PET)
+	ResponsePostDto updatePost(@RequestBody RequestLostFoundDto dto, @PathVariable("id") String id) {
+		return lostfound.updatePost(dto, id);
+	}
+	
+//	"/lostfound/en/v1/userdata"
+	@PostMapping(value = LostFoundApiConstants.GET_USER_DATA_LIST_ID)
+	ArrayList<ResponsePostDto> getUserDataListId(@RequestBody String[] posts) {
+		return lostfound.getUserDataListId(posts);
 	}
 	
 }
