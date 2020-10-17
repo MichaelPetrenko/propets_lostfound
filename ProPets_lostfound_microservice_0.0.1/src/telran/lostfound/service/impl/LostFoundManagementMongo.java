@@ -3,8 +3,6 @@ package telran.lostfound.service.impl;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.RequestEntity;
@@ -18,7 +16,10 @@ import telran.lostfound.api.ResponseLostFoundDto;
 import telran.lostfound.api.ResponsePostDto;
 import telran.lostfound.api.codes.NoContentException;
 import telran.lostfound.api.codes.NotExistsException;
+import telran.lostfound.api.imaga.Color;
+import telran.lostfound.api.imaga.Colors;
 import telran.lostfound.api.imaga.ColorsApiResult;
+import telran.lostfound.api.imaga.ColorsResult;
 import telran.lostfound.api.imaga.Tag;
 import telran.lostfound.api.imaga.Tags;
 import telran.lostfound.api.imaga.TagsApiResult;
@@ -133,41 +134,55 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 		return null;
 	}
 
-	private TagsApiResult checkingTagsFromI(String imageLink) throws URISyntaxException {
-		TagsApiResult tap = new TagsApiResult();
+	private String[] checkingTagsFromI(String imageLink) throws URISyntaxException {
+		
 		RestTemplate restTemplate = new RestTemplate();
 		String endPointTags = "https://api.imagga.com/v2/tags?image_url=";
 		RequestEntity<Void> request = RequestEntity.get(new URI(endPointTags + imageLink)).header("Authorization",
 				"Basic YWNjX2EwZDljMDBhNGM0MTEzYjpiZWNlYWU1YTdmODE3NTNhNmEzMzM2OWQxNzc3MWMwYg==").build();
 		ResponseEntity<TagsApiResult> response = restTemplate.exchange(request, TagsApiResult.class);
+		
 		if (!response.getBody().status.type.equals("success")) {
 			return null;
 		}
 
 		Tags result = response.getBody().result;
-//		^result = Tag[] tags;
 		Tag[] tagsArr = result.tags;
-//		^ public Double confidence;
-//		public Map<String, String> tag;
-		String[] finalRes;
-//		String str = tag.get("en");
-//		Arrays.stream(tagsArr).limit(3).forEach();
+		String[] finalRes = new String[3];
+		
+		for (int i = 0; i < 3; i++) {
+			Tag tagIter = tagsArr[i];
+			String str = tagIter.tag.get("en");
+			finalRes[i] = str;
+		}
 
-		return null;
+		return finalRes;
 
 	}
 
-	private ColorsApiResult checkingColorsFromI(String imageLink) throws URISyntaxException {
+	private String[] checkingColorsFromI(String imageLink) throws URISyntaxException {
+		
 		RestTemplate restTemplate = new RestTemplate();
 		String endPointColors = "https://api.imagga.com/v2/colors?image_url=";
 		RequestEntity<Void> request = RequestEntity.get(new URI(endPointColors + imageLink)).header("Authorization",
 				"Basic YWNjX2EwZDljMDBhNGM0MTEzYjpiZWNlYWU1YTdmODE3NTNhNmEzMzM2OWQxNzc3MWMwYg==").build();
 		ResponseEntity<ColorsApiResult> response = restTemplate.exchange(request, ColorsApiResult.class);
+		
 		if (!response.getBody().status.type.equals("success")) {
 			return null;
 		}
 		
-		return null;
+		ColorsResult result = response.getBody().result;
+		Color[] foreColorArr = result.colors.foreground_colors;
+		String[] finalRes = new String[2];
+		
+		for (int i = 0; i < 2; i++) {
+			Color color = foreColorArr[i];
+			String str = color.closest_palette_color_parent;
+			finalRes[i] = str;
+		}
+		
+		return finalRes;
 
 	}
 
