@@ -1,5 +1,6 @@
 package telran.lostfound.service.interfaces;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 import telran.lostfound.api.RequestLostFoundDto;
@@ -17,6 +18,9 @@ public interface ILostFoundManagement {
 	ResponsePostDto updatePost(RequestLostFoundDto dto, String postId);									//D get ret
 	ArrayList<ResponsePostDto> getUserDataListId(String[] posts);			//TODO FIXME TODO Location!!!!!!!!!!!!!!!!										//
 	
+	String[] getTagsFromImagga(String imageLink) throws URISyntaxException;
+	
+	// 
 	//=============================================================================
 	
 	ResponseGetPostsDto searchInfoOfFound( //get ret
