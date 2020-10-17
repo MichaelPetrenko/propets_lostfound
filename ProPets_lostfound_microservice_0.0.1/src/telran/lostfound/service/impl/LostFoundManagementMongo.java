@@ -1,7 +1,6 @@
 package telran.lostfound.service.impl;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.RequestEntity;
@@ -27,19 +26,21 @@ import telran.lostfound.service.interfaces.ILostFoundManagement;
 
 @Service
 public class LostFoundManagementMongo implements ILostFoundManagement {
+	
+	private final String imaggaAuth = "Basic YWNjX2EwZDljMDBhNGM0MTEzYjpiZWNlYWU1YTdmODE3NTNhNmEzMzM2OWQxNzc3MWMwYg==";
+	private final int contentTagsLength = 3;
+	private final int colorTagsLength = 2;
 
 	@Autowired
 	LostfoundRepository repo;
 
 	@Override
-	public ResponseLostFoundDto newLostOrFoundPet(RequestLostFoundDto dto, String login, boolean lostOrFound) throws URISyntaxException {
+	public ResponseLostFoundDto newLostOrFoundPet(RequestLostFoundDto dto, String login, boolean lostOrFound) {
 		if (dto == null) {
 			throw new NoContentException();
 		}
 		LostFoundEntity entity = new LostFoundEntity(dto, lostOrFound, login);
-		System.out.println(" - - - - - - - - -- " + entity.getPhotos().toString());
-		System.out.println(" - - - - -- - - - -- "+ entity.getPhotos()[0].toString());
-		entity.setTags(getTagsFromImagga(entity.getPhotos()[0]));
+		entity.setTags(getTagsAndcolorsOfPicture(entity.getPhotos()[0]));
 		repo.save(entity);
 
 		ResponseLostFoundDto resp = new ResponseLostFoundDto(entity.getId(), entity.getTypePost(),
@@ -127,32 +128,41 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 	}
 
 	@Override
-	public String[] getTagsFromImagga(String imageLink) throws URISyntaxException {
-
-		String[] colors = checkingColorsFromI(imageLink);
-		String[] tags = checkingTagsFromI(imageLink);
-		String[] res = uniteArrays(tags, colors);
-		
-		return res;
+	public String[] getTagsAndcolorsOfPicture(String imageLink) {
+		try {
+			String[] colors = gettingColorsOfImgFromImagga(imageLink);
+			String[] tags = gettingTagsOfImgFromImagga(imageLink);
+			String[] res = uniteArrays(tags, colors);
+			return res;
+		} catch (Exception e) {
+			throw new NoContentException();
+		}
 	}
 
 	private String[] uniteArrays(String[] tags, String[] colors) {
-		String[] res = new	String[tags.length+colors.length];
-		for (int i = 0; i < 3; i++) {
+		String[] res = new String[contentTagsLength + colorTagsLength];
+		for (int i = 0; i < contentTagsLength; i++) {
 			res[i] = tags[i];
 		}
-		for (int i = 3, j = 0; j < 2; j++, i++) {
+		for (int i = contentTagsLength, j = 0; j < colorTagsLength; j++, i++) {
 			res[i] = colors[j];
 		}
 		return res;
 	}
 
-	private String[] checkingTagsFromI(String imageLink) throws URISyntaxException {
-
+	private String[] gettingTagsOfImgFromImagga(String imageLink) {
 		RestTemplate restTemplate = new RestTemplate();
 		String endPointTags = "https://api.imagga.com/v2/tags?image_url=";
-		RequestEntity<Void> request = RequestEntity.get(new URI(endPointTags + imageLink)).header("Authorization",
-				"Basic YWNjX2EwZDljMDBhNGM0MTEzYjpiZWNlYWU1YTdmODE3NTNhNmEzMzM2OWQxNzc3MWMwYg==").build();
+		URI uri;
+		try {
+			uri = new URI(endPointTags + imageLink);
+		} catch (Exception e) {
+			throw new NoContentException();
+		}
+		RequestEntity<Void> request = RequestEntity
+				.get(uri)
+				.header("Authorization", imaggaAuth)
+				.build();
 		ResponseEntity<TagsApiResult> response = restTemplate.exchange(request, TagsApiResult.class);
 
 		if (!response.getBody().status.type.equals("success")) {
@@ -161,24 +171,29 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 
 		Tags result = response.getBody().result;
 		Tag[] tagsArr = result.tags;
-		String[] finalRes = new String[3];
+		String[] finalRes = new String[contentTagsLength];
 
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < contentTagsLength; i++) {
 			Tag tagIter = tagsArr[i];
 			String str = tagIter.tag.get("en");
 			finalRes[i] = str;
 		}
-
 		return finalRes;
-
 	}
 
-	private String[] checkingColorsFromI(String imageLink) throws URISyntaxException {
-
+	private String[] gettingColorsOfImgFromImagga(String imageLink) {
 		RestTemplate restTemplate = new RestTemplate();
 		String endPointColors = "https://api.imagga.com/v2/colors?image_url=";
-		RequestEntity<Void> request = RequestEntity.get(new URI(endPointColors + imageLink)).header("Authorization",
-				"Basic YWNjX2EwZDljMDBhNGM0MTEzYjpiZWNlYWU1YTdmODE3NTNhNmEzMzM2OWQxNzc3MWMwYg==").build();
+		URI uri;
+		try {
+			uri = new URI(endPointColors + imageLink);
+		} catch (Exception e) {
+			throw new NoContentException();
+		}
+		RequestEntity<Void> request = RequestEntity
+				.get(uri)
+				.header("Authorization", imaggaAuth)
+				.build();
 		ResponseEntity<ColorsApiResult> response = restTemplate.exchange(request, ColorsApiResult.class);
 
 		if (!response.getBody().status.type.equals("success")) {
@@ -187,16 +202,14 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 
 		ColorsResult result = response.getBody().result;
 		Color[] foreColorArr = result.colors.foreground_colors;
-		String[] finalRes = new String[2];
+		String[] finalRes = new String[colorTagsLength];
 
-		for (int i = 0; i < 2; i++) {
+		for (int i = 0; i < colorTagsLength; i++) {
 			Color color = foreColorArr[i];
 			String str = color.closest_palette_color_parent;
 			finalRes[i] = str;
 		}
-
 		return finalRes;
-
 	}
 
 }

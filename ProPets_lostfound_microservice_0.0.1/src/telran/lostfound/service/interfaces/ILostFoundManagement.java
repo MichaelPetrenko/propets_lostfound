@@ -16,9 +16,8 @@ public interface ILostFoundManagement {
 	ResponsePostDto postById(String postID); 															//D get ret
 	ResponsePostDto deletePostById(String postId);														//D get ret
 	ResponsePostDto updatePost(RequestLostFoundDto dto, String postId);									//D get ret
-	ArrayList<ResponsePostDto> getUserDataListId(String[] posts);			//TODO FIXME TODO Location!!!!!!!!!!!!!!!!										//
-	
-	String[] getTagsFromImagga(String imageLink) throws URISyntaxException;
+	ArrayList<ResponsePostDto> getUserDataListId(String[] posts);			//TODO FIXME TODO Location!!!!!!!!!!!!!!!!	
+	String[] getTagsAndcolorsOfPicture(String imageLink);
 	
 	// 
 	//=============================================================================

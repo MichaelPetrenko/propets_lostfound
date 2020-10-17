@@ -32,13 +32,13 @@ public class LostfoundController {
 	
 //	"/lostfound/en/v1/lost/{login}"
 	@PostMapping(value = LostFoundApiConstants.NEW_LOST_PET)
-	ResponseLostFoundDto newLostPet(@RequestBody RequestLostFoundDto lostFoundDto, @PathVariable String login) throws URISyntaxException {
+	ResponseLostFoundDto newLostPet(@RequestBody RequestLostFoundDto lostFoundDto, @PathVariable String login) throws URISyntaxException { //TODO FIXME
 		return lostfound.newLostOrFoundPet(lostFoundDto, login, false);
 	}
 	
 //	"/lostfound/en/v1/found/{login}"
 	@PostMapping(value = LostFoundApiConstants.NEW_FOUND_PET)
-	ResponseLostFoundDto newFoundPet(@RequestBody RequestLostFoundDto lostFoundDto, @PathVariable String login) throws URISyntaxException {
+	ResponseLostFoundDto newFoundPet(@RequestBody RequestLostFoundDto lostFoundDto, @PathVariable String login) throws URISyntaxException { //TODO FIXME
 		return lostfound.newLostOrFoundPet(lostFoundDto, login, true);
 	}
 	
@@ -76,6 +76,12 @@ public class LostfoundController {
 	@PostMapping(value = LostFoundApiConstants.GET_USER_DATA_LIST_ID)
 	ArrayList<ResponsePostDto> getUserDataListId(@RequestBody String[] posts) {
 		return lostfound.getUserDataListId(posts);
+	}
+	
+//	"/lostfound/en/v1/tagscolors/"
+	@GetMapping(value = LostFoundApiConstants.TAGS_AND_COLORS_OF_PICTURE)
+	String[] getTagsAndcolorsOfPicture(@RequestParam String image_url) {
+		return lostfound.getTagsAndcolorsOfPicture(image_url);
 	}
 	
 }
