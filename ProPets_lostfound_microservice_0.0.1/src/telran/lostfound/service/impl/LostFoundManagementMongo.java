@@ -3,7 +3,6 @@ package telran.lostfound.service.impl;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +16,6 @@ import telran.lostfound.api.ResponsePostDto;
 import telran.lostfound.api.codes.NoContentException;
 import telran.lostfound.api.codes.NotExistsException;
 import telran.lostfound.api.imaga.Color;
-import telran.lostfound.api.imaga.Colors;
 import telran.lostfound.api.imaga.ColorsApiResult;
 import telran.lostfound.api.imaga.ColorsResult;
 import telran.lostfound.api.imaga.Tag;
@@ -34,11 +32,14 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 	LostfoundRepository repo;
 
 	@Override
-	public ResponseLostFoundDto newLostOrFoundPet(RequestLostFoundDto dto, String login, boolean lostOrFound) {
+	public ResponseLostFoundDto newLostOrFoundPet(RequestLostFoundDto dto, String login, boolean lostOrFound) throws URISyntaxException {
 		if (dto == null) {
 			throw new NoContentException();
 		}
 		LostFoundEntity entity = new LostFoundEntity(dto, lostOrFound, login);
+		System.out.println(" - - - - - - - - -- " + entity.getPhotos().toString());
+		System.out.println(" - - - - -- - - - -- "+ entity.getPhotos()[0].toString());
+		entity.setTags(getTagsFromImagga(entity.getPhotos()[0]));
 		repo.save(entity);
 
 		ResponseLostFoundDto resp = new ResponseLostFoundDto(entity.getId(), entity.getTypePost(),
@@ -128,20 +129,32 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 	@Override
 	public String[] getTagsFromImagga(String imageLink) throws URISyntaxException {
 
-		checkingColorsFromI(imageLink);
-		checkingTagsFromI(imageLink);
+		String[] colors = checkingColorsFromI(imageLink);
+		String[] tags = checkingTagsFromI(imageLink);
+		String[] res = uniteArrays(tags, colors);
+		
+		return res;
+	}
 
-		return null;
+	private String[] uniteArrays(String[] tags, String[] colors) {
+		String[] res = new	String[tags.length+colors.length];
+		for (int i = 0; i < 3; i++) {
+			res[i] = tags[i];
+		}
+		for (int i = 3, j = 0; j < 2; j++, i++) {
+			res[i] = colors[j];
+		}
+		return res;
 	}
 
 	private String[] checkingTagsFromI(String imageLink) throws URISyntaxException {
-		
+
 		RestTemplate restTemplate = new RestTemplate();
 		String endPointTags = "https://api.imagga.com/v2/tags?image_url=";
 		RequestEntity<Void> request = RequestEntity.get(new URI(endPointTags + imageLink)).header("Authorization",
 				"Basic YWNjX2EwZDljMDBhNGM0MTEzYjpiZWNlYWU1YTdmODE3NTNhNmEzMzM2OWQxNzc3MWMwYg==").build();
 		ResponseEntity<TagsApiResult> response = restTemplate.exchange(request, TagsApiResult.class);
-		
+
 		if (!response.getBody().status.type.equals("success")) {
 			return null;
 		}
@@ -149,7 +162,7 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 		Tags result = response.getBody().result;
 		Tag[] tagsArr = result.tags;
 		String[] finalRes = new String[3];
-		
+
 		for (int i = 0; i < 3; i++) {
 			Tag tagIter = tagsArr[i];
 			String str = tagIter.tag.get("en");
@@ -161,27 +174,27 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 	}
 
 	private String[] checkingColorsFromI(String imageLink) throws URISyntaxException {
-		
+
 		RestTemplate restTemplate = new RestTemplate();
 		String endPointColors = "https://api.imagga.com/v2/colors?image_url=";
 		RequestEntity<Void> request = RequestEntity.get(new URI(endPointColors + imageLink)).header("Authorization",
 				"Basic YWNjX2EwZDljMDBhNGM0MTEzYjpiZWNlYWU1YTdmODE3NTNhNmEzMzM2OWQxNzc3MWMwYg==").build();
 		ResponseEntity<ColorsApiResult> response = restTemplate.exchange(request, ColorsApiResult.class);
-		
+
 		if (!response.getBody().status.type.equals("success")) {
 			return null;
 		}
-		
+
 		ColorsResult result = response.getBody().result;
 		Color[] foreColorArr = result.colors.foreground_colors;
 		String[] finalRes = new String[2];
-		
+
 		for (int i = 0; i < 2; i++) {
 			Color color = foreColorArr[i];
 			String str = color.closest_palette_color_parent;
 			finalRes[i] = str;
 		}
-		
+
 		return finalRes;
 
 	}

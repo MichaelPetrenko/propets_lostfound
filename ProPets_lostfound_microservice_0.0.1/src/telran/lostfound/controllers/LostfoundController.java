@@ -1,5 +1,6 @@
 package telran.lostfound.controllers;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,13 +32,13 @@ public class LostfoundController {
 	
 //	"/lostfound/en/v1/lost/{login}"
 	@PostMapping(value = LostFoundApiConstants.NEW_LOST_PET)
-	ResponseLostFoundDto newLostPet(@RequestBody RequestLostFoundDto lostFoundDto, @PathVariable String login) {
+	ResponseLostFoundDto newLostPet(@RequestBody RequestLostFoundDto lostFoundDto, @PathVariable String login) throws URISyntaxException {
 		return lostfound.newLostOrFoundPet(lostFoundDto, login, false);
 	}
 	
 //	"/lostfound/en/v1/found/{login}"
 	@PostMapping(value = LostFoundApiConstants.NEW_FOUND_PET)
-	ResponseLostFoundDto newFoundPet(@RequestBody RequestLostFoundDto lostFoundDto, @PathVariable String login) {
+	ResponseLostFoundDto newFoundPet(@RequestBody RequestLostFoundDto lostFoundDto, @PathVariable String login) throws URISyntaxException {
 		return lostfound.newLostOrFoundPet(lostFoundDto, login, true);
 	}
 	
