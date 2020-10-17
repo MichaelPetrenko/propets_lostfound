@@ -19,7 +19,6 @@ public interface ILostFoundManagement {
 	ArrayList<ResponsePostDto> getUserDataListId(String[] posts);			//TODO FIXME TODO Location!!!!!!!!!!!!!!!!	
 	String[] getTagsAndcolorsOfPicture(String imageLink);
 	
-	// 
 	//=============================================================================
 	
 	ResponseGetPostsDto searchInfoOfFound( //get ret
