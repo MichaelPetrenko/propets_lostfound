@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.geojson.Point;
 import com.mongodb.client.model.geojson.Position;
 
@@ -46,6 +47,10 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 		if (dto == null) {
 			throw new NoContentException();
 		}
+		
+		//TODO Here we need to check Location - if not ex-s - to make it from address.
+		
+		
 		LostFoundEntity entity = new LostFoundEntity(dto, lostOrFound, login);
 		repo.save(entity);
 		
@@ -202,7 +207,9 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 	
 	@Override
 	public ResponseGetPostsDto getPostsOfLostPets(int items, int currentPage) {
-		// TODO Auto-generated method stub
+		Point point = new Point(new Position(35.35, 31.35));
+		Filters.near("fiendName", point, 0., 50000.);
+//		repo.find(Filters.near("contact.location", refPoint, 5000.0, 1000.0)).forEach(printBlock);
 		return null;
 	}
 
