@@ -207,9 +207,7 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 	
 	@Override
 	public ResponseGetPostsDto getPostsOfLostPets(int items, int currentPage) {
-		Point point = new Point(new Position(35.35, 31.35));
-		Filters.near("fiendName", point, 0., 50000.);
-//		repo.find(Filters.near("contact.location", refPoint, 5000.0, 1000.0)).forEach(printBlock);
+		//TODO
 		return null;
 	}
 
@@ -221,14 +219,16 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 
 	@Override
 	public ResponseGetPostsDto searchInfoOfFound(int items, int currentPage) {
-		
-//		Point point = new Point(new Position(90.453, 130.346));
+		//TODO
 		return null;
 	}
 
 	@Override
 	public ResponseGetPostsDto searchInfoOfLost(int items, int currentPage) {
-		// TODO Auto-generated method stub
+		//TODO
+		Point point = new Point(new Position(35.35, 31.35));
+		Filters.near("fiendName", point, 0., 50000.);
+//		repo.find(Filters.near("contact.location", refPoint, 5000.0, 1000.0)).forEach(printBlock);
 		return null;
 	}
 
