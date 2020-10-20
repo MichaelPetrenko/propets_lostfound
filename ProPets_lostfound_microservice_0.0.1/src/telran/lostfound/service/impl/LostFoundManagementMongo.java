@@ -8,6 +8,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.mongodb.client.model.geojson.Point;
+import com.mongodb.client.model.geojson.Position;
+
+import org.springframework.data.mongodb.core.query.Criteria;
+
+import telran.lostfound.api.GeolocationPointMongoDto;
+import telran.lostfound.api.Location;
 import telran.lostfound.api.RequestLostFoundDto;
 import telran.lostfound.api.ResponseGetPostsDto;
 import telran.lostfound.api.ResponseLostFoundDto;
@@ -40,12 +47,16 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 			throw new NoContentException();
 		}
 		LostFoundEntity entity = new LostFoundEntity(dto, lostOrFound, login);
-		entity.setTags(getTagsAndcolorsOfPicture(entity.getPhotos()[0]));
 		repo.save(entity);
+		
+		double[] coord = entity.getLocation().getCoordinates();
 
-		ResponseLostFoundDto resp = new ResponseLostFoundDto(entity.getId(), entity.getTypePost(),
-				entity.getUserLogin(), entity.getUserName(), entity.getAvatar(), entity.getDatePost(), entity.getType(),
-				entity.getSex(), entity.getBreed(), entity.getTags(), entity.getPhotos(), entity.getLocation());
+		ResponseLostFoundDto resp = new ResponseLostFoundDto(
+				entity.getId(), entity.getTypePost(),
+				entity.getUserLogin(), entity.getUserName(), entity.getAvatar(), 
+				entity.getDatePost(), entity.getType(),
+				entity.getSex(), entity.getBreed(), entity.getTags(), 
+				entity.getPhotos(), entity.getAddress(), new Location(coord[0], coord[1]));
 		return resp;
 	}
 
@@ -61,7 +72,8 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 		entity.setType(dto.type);
 		entity.setSex(dto.sex);
 		entity.setBreed(dto.breed);
-		entity.setLocation(dto.location);
+		entity.setAddress(dto.address);
+		entity.setLocation(new GeolocationPointMongoDto(dto.location.longitude, dto.location.latitude));
 		entity.setPhotos(dto.photos);
 		entity.setTags(dto.tags);
 		repo.save(entity);
@@ -80,30 +92,6 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 			}
 		}
 		return res;
-	}
-
-	@Override
-	public ResponseGetPostsDto getPostsOfLostPets(int items, int currentPage) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ResponseGetPostsDto getPostsOfFoundPets(int items, int currentPage) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ResponseGetPostsDto searchInfoOfFound(int items, int currentPage) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ResponseGetPostsDto searchInfoOfLost(int items, int currentPage) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -211,5 +199,31 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 		}
 		return finalRes;
 	}
+	
+	@Override
+	public ResponseGetPostsDto getPostsOfLostPets(int items, int currentPage) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ResponseGetPostsDto getPostsOfFoundPets(int items, int currentPage) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ResponseGetPostsDto searchInfoOfFound(int items, int currentPage) {
+		
+//		Point point = new Point(new Position(90.453, 130.346));
+		return null;
+	}
+
+	@Override
+	public ResponseGetPostsDto searchInfoOfLost(int items, int currentPage) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 }

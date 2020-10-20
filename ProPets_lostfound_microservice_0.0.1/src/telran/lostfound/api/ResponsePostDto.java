@@ -1,6 +1,6 @@
 package telran.lostfound.api;
 
-import telran.lostfound.domain.entities.Location;
+import telran.lostfound.domain.entities.Address;
 import telran.lostfound.domain.entities.LostFoundEntity;
 
 public class ResponsePostDto {
@@ -16,6 +16,7 @@ public class ResponsePostDto {
 	public String breed;
 	public String[] tags;
 	public String[] photos;
+	public Address address;
 	public Location location;
 	
 	public ResponsePostDto(LostFoundEntity ent) {
@@ -31,7 +32,10 @@ public class ResponsePostDto {
 		this.breed = ent.getBreed();
 		this.tags = ent.getTags();
 		this.photos = ent.getPhotos();
-		this.location = ent.getLocation();
+		this.address = ent.getAddress();
+		
+		double[] coord = ent.getLocation().getCoordinates();
+		this.location = new Location(coord[0], coord[1]);
 	}
 	
 	public ResponsePostDto() {

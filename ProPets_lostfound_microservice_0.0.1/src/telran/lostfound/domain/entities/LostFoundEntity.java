@@ -5,6 +5,7 @@ import java.time.Instant;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import telran.lostfound.api.GeolocationPointMongoDto;
 import telran.lostfound.api.RequestLostFoundDto;
 
 @Document(collection = "lostfounds")
@@ -17,14 +18,13 @@ public class LostFoundEntity {
 	private String userName;
 	private String avatar;
 	private String datePost;
-//	think about it
 	private String type;
 	private String sex;
 	private String breed;
 	private String[] tags;
-//	API photos
 	private String[] photos;
-	private Location location;
+	private Address address;
+	private GeolocationPointMongoDto location;
 
 	public LostFoundEntity() {
 		super();
@@ -42,7 +42,8 @@ public class LostFoundEntity {
 		this.breed = dto.breed;
 		this.tags = dto.tags;
 		this.photos = dto.photos;
-		this.location = dto.location;
+		this.address = dto.address;
+		this.location = new GeolocationPointMongoDto(dto.location.longitude, dto.location.latitude);
 	}
 
 	public String getId() {
@@ -89,10 +90,6 @@ public class LostFoundEntity {
 		return photos;
 	}
 
-	public Location getLocation() {
-		return location;
-	}
-
 	public void setId(String id) {
 		this.id = id;
 	}
@@ -137,7 +134,19 @@ public class LostFoundEntity {
 		this.photos = photos;
 	}
 
-	public void setLocation(Location location) {
+	public Address getAddress() {
+		return address;
+	}
+
+	public GeolocationPointMongoDto getLocation() {
+		return location;
+	}
+
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+
+	public void setLocation(GeolocationPointMongoDto location) {
 		this.location = location;
 	}
 	

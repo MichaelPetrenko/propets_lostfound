@@ -18,16 +18,8 @@ public interface ILostFoundManagement {
 	ResponsePostDto updatePost(RequestLostFoundDto dto, String postId);									//D get ret
 	ArrayList<ResponsePostDto> getUserDataListId(String[] posts);			//TODO FIXME TODO Location!!!!!!!!!!!!!!!!	
 	String[] getTagsAndcolorsOfPicture(String imageLink);
+	ResponseGetPostsDto searchInfoOfFound(int items, int currentPage);
+	ResponseGetPostsDto searchInfoOfLost(int items, int currentPage);
 	
-	//=============================================================================
-	
-	ResponseGetPostsDto searchInfoOfFound( //get ret
-//			dto from Imaga,
-			int items, int currentPage);
-	ResponseGetPostsDto searchInfoOfLost( //get ret
-//			dto from Imaga,
-			int items, int currentPage);
-	
-	//tags and colors CONNECT TO API 
-			
+	//=============================================================================	
 }
