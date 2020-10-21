@@ -12,9 +12,8 @@ import telran.lostfound.api.ResponseGetPostsDto;
 public interface ILostFoundManagement {
 	
 	ResponseLostFoundDto newLostOrFoundPet(RequestLostFoundDto dto, String login, boolean lostOrFound) throws URISyntaxException; //D get ret x-token
-	
-	PagesDto getPostsOfLostPets(int items, int currentPage);									//get ret
-	ResponseGetPostsDto getPostsOfFoundPets(int items, int currentPage);								//get ret
+									
+	 PagesDto getPostsOfLostFoundPets(int items, int currentPage, boolean typePost);	//get ret								//get ret
 	
 	ResponsePostDto postById(String postID); 															//D get ret
 	ResponsePostDto deletePostById(String postId);														//D get ret

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import telran.lostfound.api.ResponseGetPostsDto;
 import telran.lostfound.api.LostFoundApiConstants;
 import telran.lostfound.api.PagesDto;
 import telran.lostfound.api.RequestLostFoundDto;
@@ -46,13 +45,13 @@ public class LostfoundController {
 //	"/lostfound/en/v1/losts"
 	@GetMapping(value = LostFoundApiConstants.GET_POSTS_OF_LOST_PETS)
 	PagesDto getPostsOfLostPets(@RequestParam int currentPage, @RequestParam int itemsOnPage) {
-		return lostfound.getPostsOfLostPets(itemsOnPage, currentPage);
+		return lostfound.getPostsOfLostFoundPets(itemsOnPage, currentPage, false);
 	}
 	
 //	"/lostfound/en/v1/founds"
 	@GetMapping(value = LostFoundApiConstants.GET_POSTS_OF_FOUND_PETS)
-	ResponseGetPostsDto getPostsOfFoundPets(@RequestParam int currentPage, @RequestParam int itemsOnPage) {
-		return lostfound.getPostsOfFoundPets(itemsOnPage, currentPage);
+	PagesDto getPostsOfFoundPets(@RequestParam int currentPage, @RequestParam int itemsOnPage) {
+		return lostfound.getPostsOfLostFoundPets(itemsOnPage, currentPage, true);
 	}
 	
 //	"/lostfound/en/v1/{id}"
