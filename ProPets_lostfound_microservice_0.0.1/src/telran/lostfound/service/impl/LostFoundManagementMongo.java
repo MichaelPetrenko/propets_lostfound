@@ -52,7 +52,8 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 		LostFoundEntity entity = new LostFoundEntity(dto, lostOrFound, login);
 		repo.save(entity);
 		
-		double[] coord = entity.getLocation().getCoordinates();
+//		double[] coord = entity.getLocation().getCoordinates();
+		double[] coord = entity.getLocation();
 
 		ResponseLostFoundDto resp = new ResponseLostFoundDto(
 				entity.getId(), entity.getTypePost(),
@@ -76,7 +77,12 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 		entity.setSex(dto.sex);
 		entity.setBreed(dto.breed);
 		entity.setAddress(dto.address);
-		entity.setLocation(new GeolocationPointMongoDto(dto.location.longitude, dto.location.latitude));
+		
+		double[] res = new double[2];
+		res[0] = dto.location.longitude;
+		res[1] = dto.location.latitude;
+		entity.setLocation(res);
+//		entity.setLocation(new GeolocationPointMongoDto(dto.location.longitude, dto.location.latitude));
 		entity.setPhotos(dto.photos);
 		entity.setTags(dto.tags);
 		repo.save(entity);
@@ -205,16 +211,10 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 	
 	@Override
 	public ResponseGetPostsDto getPostsOfLostPets(int items, int currentPage) {
-		System.out.println("start method");
 //		Point location = new Point(new Position(33.00, -33.00));
-		Point point = new Point(43.7, 48.8);
-//				(43.7, 48.8);
-//		Distance distance = new Distance(50000);
+		Point point = new Point(35.35, 31.36);
 		Distance distance = new Distance(200, Metrics.KILOMETERS);
-		System.out.println(" = = = = = = = = = = = = 214");
 		GeoResults<LostFoundEntity> res = repo.findByLocationNear(point, distance);
-		System.out.println(" = = = = = = = = = = = = 218"
-				+ res.toString());
 		return null;
 	}
 

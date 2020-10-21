@@ -17,7 +17,8 @@ public class ResponsePostDto {
 	public String[] tags;
 	public String[] photos;
 	public Address address;
-	public Location location;
+//	public Location location;
+	public double[] location;
 	
 	public ResponsePostDto(LostFoundEntity ent) {
 		super();
@@ -34,8 +35,10 @@ public class ResponsePostDto {
 		this.photos = ent.getPhotos();
 		this.address = ent.getAddress();
 		
-		double[] coord = ent.getLocation().getCoordinates();
-		this.location = new Location(coord[0], coord[1]);
+		this.location = ent.getLocation();
+		
+//		double[] coord = ent.getLocation().getCoordinates();
+//		this.location = new Location(coord[0], coord[1]);
 	}
 	
 	public ResponsePostDto() {
