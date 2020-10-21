@@ -7,7 +7,6 @@ import org.springframework.data.mongodb.core.index.GeoSpatialIndexType;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import telran.lostfound.api.GeolocationPointMongoDto;
 import telran.lostfound.api.RequestLostFoundDto;
 
 @Document(collection = "lostfounds")

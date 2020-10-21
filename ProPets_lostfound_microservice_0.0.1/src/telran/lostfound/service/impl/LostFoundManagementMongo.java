@@ -3,6 +3,9 @@ package telran.lostfound.service.impl;
 import java.net.URI;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.GeoResults;
 import org.springframework.data.geo.Metrics;
@@ -12,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import telran.lostfound.api.GeolocationPointMongoDto;
 import telran.lostfound.api.Location;
 import telran.lostfound.api.RequestLostFoundDto;
 import telran.lostfound.api.ResponseGetPostsDto;
@@ -211,10 +213,12 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 	
 	@Override
 	public ResponseGetPostsDto getPostsOfLostPets(int items, int currentPage) {
-//		Point location = new Point(new Position(33.00, -33.00));
-		Point point = new Point(35.35, 31.36);
-		Distance distance = new Distance(200, Metrics.KILOMETERS);
-		GeoResults<LostFoundEntity> res = repo.findByLocationNear(point, distance);
+		Pageable firstPage = PageRequest.of(currentPage, items);
+		Page<LostFoundEntity> allProducts = repo.findAll(firstPage);
+		System.out.println(" = = = = = = "+allProducts.toString());
+		System.out.println(allProducts.getTotalElements());
+		allProducts.forEach(System.out::println);
+//		ResponseEntity<ColorsApiResult> response = restTemplate.exchange(request, ColorsApiResult.class);
 		return null;
 	}
 
@@ -235,5 +239,9 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 		return null;
 	}
 
+//	Point point = new Point(35.35, 31.36);
+//	Distance distance = new Distance(200, Metrics.KILOMETERS);
+//	@SuppressWarnings("unused")
+//	GeoResults<LostFoundEntity> res = repo.findByLocationNear(point, distance);
 
 }
