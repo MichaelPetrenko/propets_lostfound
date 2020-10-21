@@ -37,7 +37,7 @@ import telran.lostfound.service.interfaces.ILostFoundManagement;
 
 @Service
 public class LostFoundManagementMongo implements ILostFoundManagement {
-	
+
 	private final String imaggaAuth = "Basic YWNjX2EwZDljMDBhNGM0MTEzYjpiZWNlYWU1YTdmODE3NTNhNmEzMzM2OWQxNzc3MWMwYg==";
 	private final int contentTagsLength = 3;
 	private final int colorTagsLength = 2;
@@ -50,22 +50,19 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 		if (dto == null) {
 			throw new NoContentException();
 		}
-		
-		//TODO Here we need to check Location - if not ex-s - to make it from address.
-		
-		
+
+		// TODO Here we need to check Location - if not ex-s - to make it from address.
+
 		LostFoundEntity entity = new LostFoundEntity(dto, lostOrFound, login);
 		repo.save(entity);
-		
+
 //		double[] coord = entity.getLocation().getCoordinates();
 		double[] coord = entity.getLocation();
 
-		ResponseLostFoundDto resp = new ResponseLostFoundDto(
-				entity.getId(), entity.getTypePost(),
-				entity.getUserLogin(), entity.getUserName(), entity.getAvatar(), 
-				entity.getDatePost(), entity.getType(),
-				entity.getSex(), entity.getBreed(), entity.getTags(), 
-				entity.getPhotos(), entity.getAddress(), new Location(coord[0], coord[1]));
+		ResponseLostFoundDto resp = new ResponseLostFoundDto(entity.getId(), entity.getTypePost(),
+				entity.getUserLogin(), entity.getUserName(), entity.getAvatar(), entity.getDatePost(), entity.getType(),
+				entity.getSex(), entity.getBreed(), entity.getTags(), entity.getPhotos(), entity.getAddress(),
+				new Location(coord[0], coord[1]));
 		return resp;
 	}
 
@@ -82,7 +79,7 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 		entity.setSex(dto.sex);
 		entity.setBreed(dto.breed);
 		entity.setAddress(dto.address);
-		
+
 		double[] res = new double[2];
 		res[0] = dto.location.longitude;
 		res[1] = dto.location.latitude;
@@ -161,10 +158,7 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 		} catch (Exception e) {
 			throw new NoContentException();
 		}
-		RequestEntity<Void> request = RequestEntity
-				.get(uri)
-				.header("Authorization", imaggaAuth)
-				.build();
+		RequestEntity<Void> request = RequestEntity.get(uri).header("Authorization", imaggaAuth).build();
 		ResponseEntity<TagsApiResult> response = restTemplate.exchange(request, TagsApiResult.class);
 
 		if (!response.getBody().status.type.equals("success")) {
@@ -192,10 +186,7 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 		} catch (Exception e) {
 			throw new NoContentException();
 		}
-		RequestEntity<Void> request = RequestEntity
-				.get(uri)
-				.header("Authorization", imaggaAuth)
-				.build();
+		RequestEntity<Void> request = RequestEntity.get(uri).header("Authorization", imaggaAuth).build();
 		ResponseEntity<ColorsApiResult> response = restTemplate.exchange(request, ColorsApiResult.class);
 
 		if (!response.getBody().status.type.equals("success")) {
@@ -213,18 +204,17 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 		}
 		return finalRes;
 	}
-	
+
 	@Override
 	public PagesDto getPostsOfLostPets(int items, int currentPage) {
 		Pageable firstPage = PageRequest.of(currentPage, items);
 		Page<LostFoundEntity> allProducts = repo.findAll(firstPage);
 		int itemsTotal = (int) allProducts.getTotalElements();
-		
-//		List<LostFoundEntity> arr = allProducts.toList();
-		
-		LostFoundEntity[] posts = (LostFoundEntity[]) allProducts.toList().toArray();
-		PagesDto pDto = new PagesDto(items, currentPage, itemsTotal, posts);
-		
+
+		List<LostFoundEntity> postsList = repo.findAllByTypePost(false, firstPage);
+
+		PagesDto pDto = new PagesDto(items, currentPage, itemsTotal, postsList);
+
 		return pDto;
 	}
 
@@ -236,7 +226,7 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 
 	@Override
 	public ResponseGetPostsDto searchInfoOfFound(int items, int currentPage) {
-		//TODO
+		// TODO
 		return null;
 	}
 
