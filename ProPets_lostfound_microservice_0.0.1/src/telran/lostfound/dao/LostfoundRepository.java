@@ -19,6 +19,7 @@ public interface LostfoundRepository extends MongoRepository<LostFoundEntity, St
 	  GeoResults<LostFoundEntity> findByLocationNear(Point location, Distance distance);
 	  
 	  List<LostFoundEntity> findAllByTypePost(boolean typePost, Pageable pageable);
+	  List<LostFoundEntity> findAllByTypePost(boolean typePost);
 	
 
 }

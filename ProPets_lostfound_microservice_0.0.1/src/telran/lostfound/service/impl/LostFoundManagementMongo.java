@@ -207,12 +207,10 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 
 	@Override
 	public PagesDto getPostsOfLostFoundPets(int items, int currentPage, boolean typePost) {
-		Pageable firstPage = PageRequest.of(currentPage, items);
-		Page<LostFoundEntity> allProducts = repo.findAll(firstPage);
-		int itemsTotal = (int) allProducts.getTotalElements();
-//		TODO TRUE COUNT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		List<LostFoundEntity> postsList = repo.findAllByTypePost(typePost, firstPage);
-//		int itemsTotal = postsList.size();
+		Pageable pageable = PageRequest.of(currentPage, items);
+	
+		int itemsTotal = repo.findAllByTypePost(typePost).size();
+		List<LostFoundEntity> postsList = repo.findAllByTypePost(typePost, pageable);
 
 		PagesDto pDto = new PagesDto(items, currentPage, itemsTotal, postsList);
 		return pDto;
