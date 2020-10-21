@@ -3,6 +3,7 @@ package telran.lostfound.service.interfaces;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
+import telran.lostfound.api.PagesDto;
 import telran.lostfound.api.RequestLostFoundDto;
 import telran.lostfound.api.ResponsePostDto;
 import telran.lostfound.api.ResponseLostFoundDto;
@@ -12,7 +13,7 @@ public interface ILostFoundManagement {
 	
 	ResponseLostFoundDto newLostOrFoundPet(RequestLostFoundDto dto, String login, boolean lostOrFound) throws URISyntaxException; //D get ret x-token
 	
-	ResponseGetPostsDto getPostsOfLostPets(int items, int currentPage);									//get ret
+	PagesDto getPostsOfLostPets(int items, int currentPage);									//get ret
 	ResponseGetPostsDto getPostsOfFoundPets(int items, int currentPage);								//get ret
 	
 	ResponsePostDto postById(String postID); 															//D get ret

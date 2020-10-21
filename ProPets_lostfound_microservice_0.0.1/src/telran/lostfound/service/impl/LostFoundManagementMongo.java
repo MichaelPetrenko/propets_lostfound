@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import telran.lostfound.api.Location;
+import telran.lostfound.api.PagesDto;
 import telran.lostfound.api.RequestLostFoundDto;
 import telran.lostfound.api.ResponseGetPostsDto;
 import telran.lostfound.api.ResponseLostFoundDto;
@@ -212,14 +213,16 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 	}
 	
 	@Override
-	public ResponseGetPostsDto getPostsOfLostPets(int items, int currentPage) {
+	public PagesDto getPostsOfLostPets(int items, int currentPage) {
 		Pageable firstPage = PageRequest.of(currentPage, items);
 		Page<LostFoundEntity> allProducts = repo.findAll(firstPage);
-		System.out.println(" = = = = = = "+allProducts.toString());
-		System.out.println(allProducts.getTotalElements());
-		allProducts.forEach(System.out::println);
-//		ResponseEntity<ColorsApiResult> response = restTemplate.exchange(request, ColorsApiResult.class);
-		return null;
+		int itemsTotal = (int) allProducts.getTotalElements();
+//		allProducts.toList().toArray();
+		
+		ResponseLostFoundDto[] posts = (ResponseLostFoundDto[]) allProducts.toList().toArray();
+		PagesDto pDto = new PagesDto(items, currentPage, itemsTotal, posts);
+		
+		return pDto;
 	}
 
 	@Override
