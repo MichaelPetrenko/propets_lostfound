@@ -2,6 +2,8 @@ package telran.lostfound.service.impl;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -217,9 +219,10 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 		Pageable firstPage = PageRequest.of(currentPage, items);
 		Page<LostFoundEntity> allProducts = repo.findAll(firstPage);
 		int itemsTotal = (int) allProducts.getTotalElements();
-//		allProducts.toList().toArray();
 		
-		ResponseLostFoundDto[] posts = (ResponseLostFoundDto[]) allProducts.toList().toArray();
+//		List<LostFoundEntity> arr = allProducts.toList();
+		
+		LostFoundEntity[] posts = (LostFoundEntity[]) allProducts.toList().toArray();
 		PagesDto pDto = new PagesDto(items, currentPage, itemsTotal, posts);
 		
 		return pDto;
