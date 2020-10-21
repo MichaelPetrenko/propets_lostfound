@@ -3,16 +3,14 @@ package telran.lostfound.service.impl;
 import java.net.URI;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.geo.Distance;
+import org.springframework.data.geo.GeoResults;
+import org.springframework.data.geo.Metrics;
+import org.springframework.data.geo.Point;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.geojson.Point;
-import com.mongodb.client.model.geojson.Position;
-
-import org.springframework.data.mongodb.core.query.Criteria;
 
 import telran.lostfound.api.GeolocationPointMongoDto;
 import telran.lostfound.api.Location;
@@ -207,7 +205,16 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 	
 	@Override
 	public ResponseGetPostsDto getPostsOfLostPets(int items, int currentPage) {
-		//TODO
+		System.out.println("start method");
+//		Point location = new Point(new Position(33.00, -33.00));
+		Point point = new Point(43.7, 48.8);
+//				(43.7, 48.8);
+//		Distance distance = new Distance(50000);
+		Distance distance = new Distance(200, Metrics.KILOMETERS);
+		System.out.println(" = = = = = = = = = = = = 214");
+		GeoResults<LostFoundEntity> res = repo.findByLocationNear(point, distance);
+		System.out.println(" = = = = = = = = = = = = 218"
+				+ res.toString());
 		return null;
 	}
 
@@ -225,10 +232,6 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 
 	@Override
 	public ResponseGetPostsDto searchInfoOfLost(int items, int currentPage) {
-		//TODO
-		Point point = new Point(new Position(35.35, 31.35));
-		Filters.near("fiendName", point, 0., 50000.);
-//		repo.find(Filters.near("contact.location", refPoint, 5000.0, 1000.0)).forEach(printBlock);
 		return null;
 	}
 
