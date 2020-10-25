@@ -34,11 +34,7 @@ public class ResponsePostDto {
 		this.tags = ent.getTags();
 		this.photos = ent.getPhotos();
 		this.address = ent.getAddress();
-		
-		this.location = ent.getLocation();
-		
-//		double[] coord = ent.getLocation().getCoordinates();
-//		this.location = new Location(coord[0], coord[1]);
+		this.location = ent.getLocation().getPosition();
 	}
 	
 	public ResponsePostDto() {

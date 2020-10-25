@@ -11,8 +11,9 @@ public class PagesDto {
 	public int currentPage;
 	public int itemsTotal;
 	public List<ResponseLostFoundDto> posts;
-	
-	public PagesDto() {}
+
+	public PagesDto() {
+	}
 
 	public PagesDto(int itemsOnPage, int currentPage, int itemsTotal, List<LostFoundEntity> list) {
 		super();
@@ -20,17 +21,17 @@ public class PagesDto {
 		this.currentPage = currentPage;
 		this.itemsTotal = itemsTotal;
 		this.posts = new ArrayList<ResponseLostFoundDto>();
-		
-		
-		for(LostFoundEntity ent: list) {
-			this.posts.add(new ResponseLostFoundDto(
-					ent.getId(), ent.getTypePost(), ent.getUserLogin(), 
+
+		for (LostFoundEntity ent : list) {
+			this.posts.add(
+					new ResponseLostFoundDto
+					(ent.getId(), ent.getTypePost(), ent.getUserLogin(),
 					ent.getUserName(), ent.getAvatar(), ent.getDatePost(), 
-					ent.getType(), ent.getSex(), ent.getBreed(), 
-					ent.getTags(), ent.getPhotos(), ent.getAddress(), 
-					new Location(ent.getLocation()[0], ent.getLocation()[1])));
+					ent.getType(), ent.getSex(), ent.getBreed(),
+					ent.getTags(), ent.getPhotos(), ent.getAddress(),
+					new Location(ent.getLocation().getPosition()[0], ent.getLocation().getPosition()[1])));
+
 		}
 	}
-	
-	
+
 }

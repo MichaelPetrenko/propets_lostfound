@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import telran.lostfound.api.PagesDto;
 import telran.lostfound.api.RequestLostFoundDto;
 import telran.lostfound.api.ResponsePostDto;
+import telran.lostfound.api.SearchDto;
 import telran.lostfound.api.ResponseLostFoundDto;
 import telran.lostfound.api.ResponseGetPostsDto;
 
@@ -22,6 +23,6 @@ public interface ILostFoundManagement {
 	ArrayList<ResponsePostDto> getUserDataListId(String[] posts);										//TODO FIXME TODO Location!!!!!!!!!!!!!!!!	
 	String[] getTagsAndcolorsOfPicture(String imageLink);
 	ResponseGetPostsDto searchInfoOfFound(int items, int currentPage);
-	ResponseGetPostsDto searchInfoOfLost(int items, int currentPage);
+	PagesDto searchInfoOfLost(SearchDto dto, int items, int currentPage);
 	
 }

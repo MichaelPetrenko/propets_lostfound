@@ -17,6 +17,7 @@ import telran.lostfound.api.LostFoundApiConstants;
 import telran.lostfound.api.PagesDto;
 import telran.lostfound.api.RequestLostFoundDto;
 import telran.lostfound.api.ResponsePostDto;
+import telran.lostfound.api.SearchDto;
 import telran.lostfound.api.ResponseLostFoundDto;
 import telran.lostfound.dao.LostfoundRepository;
 import telran.lostfound.service.interfaces.ILostFoundManagement;
@@ -82,6 +83,13 @@ public class LostfoundController {
 	@GetMapping(value = LostFoundApiConstants.TAGS_AND_COLORS_OF_PICTURE)
 	String[] getTagsAndcolorsOfPicture(@RequestParam String image_url) {
 		return lostfound.getTagsAndcolorsOfPicture(image_url);
+	}
+	
+//	String SEARCH_BY_INFORMATION_OF_LOST_PET = 	
+//	"/lostfound/en/v1/lost/filter"
+	@PostMapping(value = LostFoundApiConstants.SEARCH_BY_INFORMATION_OF_LOST_PET)
+	PagesDto getGeoTest(@RequestBody SearchDto dto, @RequestParam int currentPage, @RequestParam int itemsOnPage) {
+		return lostfound.searchInfoOfLost(dto, itemsOnPage, currentPage);
 	}
 	
 }

@@ -3,10 +3,9 @@ package telran.lostfound.domain.entities;
 import java.time.Instant;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.GeoSpatialIndexType;
-import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import telran.lostfound.api.GeoDto;
 import telran.lostfound.api.RequestLostFoundDto;
 
 @Document(collection = "lostfounds")
@@ -25,10 +24,7 @@ public class LostFoundEntity {
 	private String[] tags;
 	private String[] photos;
 	private Address address;
-//	private GeolocationPointMongoDto location;
-//	@GeoSpatialIndexed
-	@GeoSpatialIndexed(type = GeoSpatialIndexType.GEO_2DSPHERE)
-	private double[] location;
+	private GeoDto location;
 
 	public LostFoundEntity() {
 		super();
@@ -47,11 +43,7 @@ public class LostFoundEntity {
 		this.tags = dto.tags;
 		this.photos = dto.photos;
 		this.address = dto.address;
-//		this.location = new GeolocationPointMongoDto(dto.location.longitude, dto.location.latitude);
-		double[] res = new double[2];
-		res[0] = dto.location.longitude;
-		res[1] = dto.location.latitude;
-		this.location = res;
+		this.location = new GeoDto(dto.location.longitude, dto.location.latitude);
 	}
 
 	public String getId() {
@@ -146,15 +138,15 @@ public class LostFoundEntity {
 		return address;
 	}
 
-	public double[] getLocation() {
-		return location;
-	}
-
 	public void setAddress(Address address) {
 		this.address = address;
 	}
 
-	public void setLocation(double[] location) {
+	public GeoDto getLocation() {
+		return location;
+	}
+
+	public void setLocation(GeoDto location) {
 		this.location = location;
 	}
 	
