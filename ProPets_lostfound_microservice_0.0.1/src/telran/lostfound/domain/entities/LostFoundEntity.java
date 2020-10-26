@@ -27,7 +27,9 @@ public class LostFoundEntity {
 	private Address address;
 //	private GeolocationPointMongoDto location;
 //	@GeoSpatialIndexed
-	@GeoSpatialIndexed(type = GeoSpatialIndexType.GEO_2DSPHERE)
+//	@GeoSpatialIndexed(type = GeoSpatialIndexType.GEO_2DSPHERE)
+//	private double[] location;
+	@GeoSpatialIndexed(name="Location")
 	private double[] location;
 
 	public LostFoundEntity() {

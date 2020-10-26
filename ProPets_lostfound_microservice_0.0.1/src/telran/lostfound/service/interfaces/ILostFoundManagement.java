@@ -2,7 +2,6 @@ package telran.lostfound.service.interfaces;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-
 import telran.lostfound.api.PagesDto;
 import telran.lostfound.api.RequestLostFoundDto;
 import telran.lostfound.api.ResponsePostDto;
