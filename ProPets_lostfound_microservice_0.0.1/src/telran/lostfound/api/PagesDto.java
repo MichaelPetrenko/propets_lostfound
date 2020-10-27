@@ -29,7 +29,7 @@ public class PagesDto {
 					ent.getUserName(), ent.getAvatar(), ent.getDatePost(), 
 					ent.getType(), ent.getSex(), ent.getBreed(),
 					ent.getTags(), ent.getPhotos(), ent.getAddress(),
-					new Location(ent.getLocation()[0], ent.getLocation()[1])));
+					new LocationDto(ent.getLocation()[0], ent.getLocation()[1])));
 
 		}
 	}

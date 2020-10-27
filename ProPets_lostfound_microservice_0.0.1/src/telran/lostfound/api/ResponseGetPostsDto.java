@@ -10,10 +10,10 @@ public class ResponseGetPostsDto {
 	public ResponsePostDto[] posts;
 	public String[] photos;
 	public Address address;
-	public Location location;
+	public LocationDto location;
 	
 	public ResponseGetPostsDto(int itemsOnPage, int currentPage, int itemsTotal, ResponsePostDto[] posts, String[] photos,
-			Address address, Location location) {
+			Address address, LocationDto location) {
 		super();
 		this.itemsOnPage = itemsOnPage;
 		this.currentPage = currentPage;

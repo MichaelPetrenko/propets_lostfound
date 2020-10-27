@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import telran.lostfound.api.Location;
+import telran.lostfound.api.LocationDto;
 import telran.lostfound.api.PagesDto;
 import telran.lostfound.api.RequestLostFoundDto;
 import telran.lostfound.api.ResponseGetPostsDto;
@@ -60,7 +60,7 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 		ResponseLostFoundDto resp = new ResponseLostFoundDto(entity.getId(), entity.getTypePost(),
 				entity.getUserLogin(), entity.getUserName(), entity.getAvatar(), entity.getDatePost(), entity.getType(),
 				entity.getSex(), entity.getBreed(), entity.getTags(), entity.getPhotos(), entity.getAddress(),
-				new Location(coord[0], coord[1]));
+				new LocationDto(coord[0], coord[1]));
 		return resp;
 	}
 
@@ -243,7 +243,7 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 //		repo.save(loc2);
 
 //		double radiusOfSearch = 4.23;
-//		
+////		
 //		List<LostFoundEntity> locations = repo.findByPositionWithin(new Circle(new Point(0.0, 0.0), radiusOfSearch));
 //		System.out.println(locations.size());
 //	}

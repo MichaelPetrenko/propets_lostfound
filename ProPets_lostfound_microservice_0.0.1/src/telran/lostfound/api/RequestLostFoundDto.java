@@ -10,12 +10,12 @@ public class RequestLostFoundDto {
 	public String sex;
 	public String breed;
 	public Address address;
-	public Location location;
+	public LocationDto location;
 	public String[] photos;
 	public String[] tags;
 
 	//Full constructor
-	public RequestLostFoundDto(String userName, String avatar, String type, String sex, String breed, Address address, Location location,
+	public RequestLostFoundDto(String userName, String avatar, String type, String sex, String breed, Address address, LocationDto location,
 			String[] photos, String[] tags) {
 		super();
 		this.userName = userName;
@@ -33,7 +33,7 @@ public class RequestLostFoundDto {
 	}
 
 	//For update post method
-	public RequestLostFoundDto(String type, String sex, String breed, Location location, String[] photos,
+	public RequestLostFoundDto(String type, String sex, String breed, LocationDto location, String[] photos,
 			String[] tags) {
 		super();
 		this.type = type;

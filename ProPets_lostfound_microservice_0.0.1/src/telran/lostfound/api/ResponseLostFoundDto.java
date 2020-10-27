@@ -15,13 +15,13 @@ public class ResponseLostFoundDto {
 	public String[] tags;
 	public String[] photos;
 	public Address address;
-	public Location location;
+	public LocationDto location;
 	
 	public ResponseLostFoundDto() {}
 
 	public ResponseLostFoundDto(String id, boolean typePost, String userLogin, String userName, String avatar,
 			String datePost, String type, String sex, String breed, String[] tags, String[] photos,
-			Address address, Location location) {
+			Address address, LocationDto location) {
 		super();
 		this.id = id;
 		this.typePost = typePost;
