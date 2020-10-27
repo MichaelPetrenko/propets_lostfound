@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.geo.Circle;
+import org.springframework.data.geo.Distance;
+import org.springframework.data.geo.Metrics;
 import org.springframework.data.geo.Point;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -234,6 +236,12 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 	@Override
 	public PagesDto searchInfoOfLost(SearchDto dto, int items, int currentPage) {
 		// TODO Auto-generated method stub
+		
+		double radiusOfSearch = 100;		
+		Distance rad = new Distance(radiusOfSearch, Metrics.KILOMETERS);
+		List<LostFoundEntity> locations = repo.findByLocationWithin(new Circle(new Point(31.894216, 34.807623), rad));
+		
+		System.out.println(locations.size());
 		return null;
 	}
 
@@ -242,11 +250,8 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 //		double[] bAdress = { 3, 3 };
 //		repo.save(loc2);
 
-//		double radiusOfSearch = 4.23;
-////		
-//		List<LostFoundEntity> locations = repo.findByPositionWithin(new Circle(new Point(0.0, 0.0), radiusOfSearch));
-//		System.out.println(locations.size());
-//	}
+		
+		
 
 //	Point point = new Point(35.35, 31.36);
 //	Distance distance = new Distance(200, Metrics.KILOMETERS);
