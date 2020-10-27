@@ -3,7 +3,6 @@ package telran.lostfound.domain.entities;
 import java.time.Instant;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.GeoSpatialIndexType;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -29,7 +28,7 @@ public class LostFoundEntity {
 //	@GeoSpatialIndexed
 //	@GeoSpatialIndexed(type = GeoSpatialIndexType.GEO_2DSPHERE)
 //	private double[] location;
-	@GeoSpatialIndexed(name="Location")
+	@GeoSpatialIndexed(name = "Location")
 	private double[] location;
 
 	public LostFoundEntity() {

@@ -224,8 +224,8 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 		
 		double radiusOfSearch = 4.23;
 //		
-		List<LostFoundEntity> locations = repo.findByPositionWithin(new Circle(new Point(0.0, 0.0), radiusOfSearch));
-		System.out.println("========================= "+ locations.size());
+//		List<LostFoundEntity> locations = repo.findByPositionWithin(new Circle(new Point(0.0, 0.0), radiusOfSearch));
+//		System.out.println("========================= "+ locations.size());
 		
 		return null;
 	}

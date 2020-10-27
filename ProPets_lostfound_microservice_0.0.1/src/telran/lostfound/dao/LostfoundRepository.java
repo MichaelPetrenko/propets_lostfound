@@ -17,7 +17,7 @@ public interface LostfoundRepository extends MongoRepository<LostFoundEntity, St
 
 	// No metric: {'geoNear' : 'person', 'near' : [x, y], maxDistance : distance }
 	// Location: {type: Point, coordinates: [35.35, 31.35]}
-	GeoResults<LostFoundEntity> findByLocationNear(Point location, Distance distance);
+	//	GeoResults<LostFoundEntity> findByLocationNear(Point location, Distance distance);
 
 	List<LostFoundEntity> findAllByTypePost(boolean typePost, Pageable pageable);
 	List<LostFoundEntity> findAllByTypePost(boolean typePost);
