@@ -7,15 +7,13 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.geo.Distance;
-import org.springframework.data.geo.Metrics;
+import org.springframework.data.geo.Circle;
 import org.springframework.data.geo.Point;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import telran.lostfound.api.GeoDto;
 import telran.lostfound.api.Location;
 import telran.lostfound.api.PagesDto;
 import telran.lostfound.api.RequestLostFoundDto;
@@ -56,7 +54,8 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 		LostFoundEntity entity = new LostFoundEntity(dto, lostOrFound, login);
 		repo.save(entity);
 
-		double[] coord = entity.getLocation().getPosition();
+//		double[] coord = entity.getLocation().getCoordinates();
+		double[] coord = entity.getLocation();
 
 		ResponseLostFoundDto resp = new ResponseLostFoundDto(entity.getId(), entity.getTypePost(),
 				entity.getUserLogin(), entity.getUserName(), entity.getAvatar(), entity.getDatePost(), entity.getType(),
@@ -78,7 +77,12 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 		entity.setSex(dto.sex);
 		entity.setBreed(dto.breed);
 		entity.setAddress(dto.address);
-		entity.setLocation(new GeoDto(dto.location.longitude, dto.location.latitude));
+
+		double[] res = new double[2];
+		res[0] = dto.location.longitude;
+		res[1] = dto.location.latitude;
+		entity.setLocation(res);
+//		entity.setLocation(new GeolocationPointMongoDto(dto.location.longitude, dto.location.latitude));
 		entity.setPhotos(dto.photos);
 		entity.setTags(dto.tags);
 		repo.save(entity);
@@ -202,7 +206,7 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 	@Override
 	public PagesDto getPostsOfLostFoundPets(int items, int currentPage, boolean typePost) {
 		Pageable pageable = PageRequest.of(currentPage, items);
-
+	
 		int itemsTotal = repo.findAllByTypePost(typePost).size();
 		List<LostFoundEntity> postsList = repo.findAllByTypePost(typePost, pageable);
 
@@ -212,23 +216,41 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 
 	@Override
 	public ResponseGetPostsDto searchInfoOfFound(int items, int currentPage) {
-		// TODO
+		//TODO
 		return null;
 	}
 
+//	@Override
+//	public ResponseGetPostsDto searchInfoOfLost(int items, int currentPage) {
+//		
+//		double radiusOfSearch = 4.23;
+////		
+////		List<LostFoundEntity> locations = repo.findByPositionWithin(new Circle(new Point(0.0, 0.0), radiusOfSearch));
+////		System.out.println("========================= "+ locations.size());
+//		
+//		return null;
+//	}
+
 	@Override
 	public PagesDto searchInfoOfLost(SearchDto dto, int items, int currentPage) {
-		
-		double radius = 8.00;
-		Distance distanceOfSearch = new Distance(radius, Metrics.KILOMETERS);
-		
-		Pageable pageable = PageRequest.of(currentPage, items);
-		Point location = new Point(dto.location.longitude, dto.location.latitude);
-		
-		int itemsTotal = repo.findByLocationNear(location, distanceOfSearch).size();
-		List<LostFoundEntity> postsList = repo.findByLocationNear(location, distanceOfSearch, pageable);
-		PagesDto pDto = new PagesDto(items, currentPage, itemsTotal, postsList);
-		
-		return pDto;
+		// TODO Auto-generated method stub
+		return null;
 	}
+
+//		double[] aAdress = { 10, 10 };
+//		repo.save(loc);
+//		double[] bAdress = { 3, 3 };
+//		repo.save(loc2);
+
+//		double radiusOfSearch = 4.23;
+//		
+//		List<LostFoundEntity> locations = repo.findByPositionWithin(new Circle(new Point(0.0, 0.0), radiusOfSearch));
+//		System.out.println(locations.size());
+//	}
+
+//	Point point = new Point(35.35, 31.36);
+//	Distance distance = new Distance(200, Metrics.KILOMETERS);
+//	@SuppressWarnings("unused")
+//	GeoResults<LostFoundEntity> res = repo.findByLocationNear(point, distance);
+
 }
