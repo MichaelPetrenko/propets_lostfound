@@ -12,16 +12,17 @@ import telran.lostfound.api.ResponseGetPostsDto;
 
 public interface ILostFoundManagement {
 	
-	ResponseLostFoundDto newLostOrFoundPet(RequestLostFoundDto dto, String login, boolean lostOrFound) throws URISyntaxException; //D get ret x-token
+	ResponseLostFoundDto newLostOrFoundPet(RequestLostFoundDto dto, String login, boolean lostOrFound) 
+			throws URISyntaxException; //D get ret x-token
 									
-	 PagesDto getPostsOfLostFoundPets(int items, int currentPage, boolean typePost);	//get ret								//get ret
+	PagesDto getPostsOfLostFoundPets(int items, int currentPage, boolean typePost);	    //get ret								
 	
-	ResponsePostDto postById(String postID); 															//D get ret
-	ResponsePostDto deletePostById(String postId);														//D get ret
-	ResponsePostDto updatePost(RequestLostFoundDto dto, String postId);									//D get ret
+	ResponsePostDto postById(String postID); 											//D get ret
+	ResponsePostDto deletePostById(String postId);										//D get ret
+	ResponsePostDto updatePost(RequestLostFoundDto dto, String postId);					//D get ret
 	
-	ArrayList<ResponsePostDto> getUserDataListId(String[] posts);										//TODO FIXME TODO Location!!!!!!!!!!!!!!!!	
-	String[] getTagsAndcolorsOfPicture(String imageLink);
+	ArrayList<ResponsePostDto> getUserDataListId(String[] posts);						//TODO FIXME TODO Location!!!!!!!!!!!!!!!!	
+	String[] getTagsAndcolorsOfPicture(String imageLink);								//D get ret
 	ResponseGetPostsDto searchInfoOfFound(int items, int currentPage);
 	PagesDto searchInfoOfLost(SearchDto dto, int items, int currentPage);
 	
