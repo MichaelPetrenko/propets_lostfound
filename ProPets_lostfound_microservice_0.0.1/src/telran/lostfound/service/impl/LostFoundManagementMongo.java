@@ -3,9 +3,6 @@ package telran.lostfound.service.impl;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,11 +15,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import telran.lostfound.api.LocationDto;
-import telran.lostfound.api.PagesDto;
+import telran.lostfound.api.ResponsePagesDto;
 import telran.lostfound.api.RequestLostFoundDto;
 import telran.lostfound.api.ResponseLostFoundDto;
 import telran.lostfound.api.ResponsePostDto;
-import telran.lostfound.api.SearchDto;
+import telran.lostfound.api.RequestSearchDto;
 import telran.lostfound.api.codes.NoContentException;
 import telran.lostfound.api.codes.NotExistsException;
 import telran.lostfound.api.imaga.Color;
@@ -205,27 +202,27 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 	}
 
 	@Override
-	public PagesDto getPostsOfLostFoundPets(int items, int currentPage, boolean typePost) {
+	public ResponsePagesDto getPostsOfLostFoundPets(int items, int currentPage, boolean typePost) {
 		
 		Pageable pageable = PageRequest.of(currentPage, items);
 
 		int itemsTotal = repo.findAllByTypePost(typePost).size(); 
 		List<LostFoundEntity> postsList = repo.findAllByTypePost(typePost, pageable);
 
-		PagesDto pDto = new PagesDto(items, currentPage, itemsTotal, postsList);
+		ResponsePagesDto pDto = new ResponsePagesDto(items, currentPage, itemsTotal, postsList);
 		return pDto;
 	}
 
 	@Override
-	public PagesDto searchInfoOfLostOrFound(SearchDto dto, int items, int currentPage, boolean typePost) {
+	public ResponsePagesDto searchInfoOfLostOrFound(RequestSearchDto dto, int items, int currentPage, boolean typePost) {
 		
 		Distance radiusOfSearch = new Distance(10, Metrics.KILOMETERS);
 		Point pointOfSearch = new Point(dto.location.longitude, dto.location.latitude);
 		Pageable pageable = PageRequest.of(currentPage, items);
 
 		List<LostFoundEntity> allFounds = repo.findByLocationNearAndTypePostAndType(pointOfSearch, radiusOfSearch, typePost, dto.type, pageable);
-		int itemsTotal = allFounds.size();
-		PagesDto pDto = new PagesDto(items, currentPage, itemsTotal, allFounds);
+		int itemsTotal = repo.findByLocationNearAndTypePostAndType(pointOfSearch, radiusOfSearch, typePost, dto.type).size();
+		ResponsePagesDto pDto = new ResponsePagesDto(items, currentPage, itemsTotal, allFounds);
 		return pDto;
 	}
 

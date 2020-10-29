@@ -5,17 +5,17 @@ import java.util.List;
 
 import telran.lostfound.domain.entities.LostFoundEntity;
 
-public class PagesDto {
+public class ResponsePagesDto {
 
 	public int itemsOnPage;
 	public int currentPage;
 	public int itemsTotal;
 	public List<ResponseLostFoundDto> posts;
 
-	public PagesDto() {
+	public ResponsePagesDto() {
 	}
 
-	public PagesDto(int itemsOnPage, int currentPage, int itemsTotal, List<LostFoundEntity> list) {
+	public ResponsePagesDto(int itemsOnPage, int currentPage, int itemsTotal, List<LostFoundEntity> list) {
 		super();
 		this.itemsOnPage = itemsOnPage;
 		this.currentPage = currentPage;

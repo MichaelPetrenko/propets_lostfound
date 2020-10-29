@@ -1,6 +1,6 @@
 package telran.lostfound.api;
 
-public class SearchDto {
+public class RequestSearchDto {
 	
 	public String type;
 	public String breed;

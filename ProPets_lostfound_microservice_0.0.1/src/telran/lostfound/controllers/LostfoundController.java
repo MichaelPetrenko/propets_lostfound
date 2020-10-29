@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import telran.lostfound.api.LostFoundApiConstants;
-import telran.lostfound.api.PagesDto;
+import telran.lostfound.api.ResponsePagesDto;
 import telran.lostfound.api.RequestLostFoundDto;
 import telran.lostfound.api.ResponsePostDto;
-import telran.lostfound.api.SearchDto;
+import telran.lostfound.api.RequestSearchDto;
 import telran.lostfound.api.ResponseLostFoundDto;
 import telran.lostfound.dao.LostfoundRepository;
 import telran.lostfound.service.interfaces.ILostFoundManagement;
@@ -45,13 +45,13 @@ public class LostfoundController {
 	
 //	"/lostfound/en/v1/losts"
 	@GetMapping(value = LostFoundApiConstants.GET_POSTS_OF_LOST_PETS)
-	PagesDto getPostsOfLostPets(@RequestParam int currentPage, @RequestParam int itemsOnPage) {
+	ResponsePagesDto getPostsOfLostPets(@RequestParam int currentPage, @RequestParam int itemsOnPage) {
 		return lostfound.getPostsOfLostFoundPets(itemsOnPage, currentPage, false);
 	}
 	
 //	"/lostfound/en/v1/founds"
 	@GetMapping(value = LostFoundApiConstants.GET_POSTS_OF_FOUND_PETS)
-	PagesDto getPostsOfFoundPets(@RequestParam int currentPage, @RequestParam int itemsOnPage) {
+	ResponsePagesDto getPostsOfFoundPets(@RequestParam int currentPage, @RequestParam int itemsOnPage) {
 		return lostfound.getPostsOfLostFoundPets(itemsOnPage, currentPage, true);
 	}
 	
@@ -87,13 +87,13 @@ public class LostfoundController {
 		
 //	"/lostfound/en/v1/lost/filter"
 	@PostMapping(value = LostFoundApiConstants.SEARCH_BY_INFORMATION_OF_LOST_PET)
-	PagesDto searchInfoOfLost(@RequestBody SearchDto dto, @RequestParam int currentPage, @RequestParam int itemsOnPage) {
+	ResponsePagesDto searchInfoOfLost(@RequestBody RequestSearchDto dto, @RequestParam int currentPage, @RequestParam int itemsOnPage) {
 		return lostfound.searchInfoOfLostOrFound(dto, itemsOnPage, currentPage, false);
 	}
 	
 //	"/lostfound/en/v1/founds/filter"
 	@PostMapping(value = LostFoundApiConstants.SEARCH_BY_INFORMATION_OF_FOUND_PET)
-	PagesDto searchInfoOrFound(@RequestBody SearchDto dto, @RequestParam int currentPage, @RequestParam int itemsOnPage) {
+	ResponsePagesDto searchInfoOrFound(@RequestBody RequestSearchDto dto, @RequestParam int currentPage, @RequestParam int itemsOnPage) {
 		return lostfound.searchInfoOfLostOrFound(dto, itemsOnPage, currentPage, true);
 	}
 	
