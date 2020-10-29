@@ -7,7 +7,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.geo.Circle;
 import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.Metrics;
 import org.springframework.data.geo.Point;
@@ -218,44 +217,20 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 
 	@Override
 	public ResponseGetPostsDto searchInfoOfFound(int items, int currentPage) {
-		//TODO
+
 		return null;
 	}
 
-//	@Override
-//	public ResponseGetPostsDto searchInfoOfLost(int items, int currentPage) {
-//		
-//		double radiusOfSearch = 4.23;
-////		
-////		List<LostFoundEntity> locations = repo.findByPositionWithin(new Circle(new Point(0.0, 0.0), radiusOfSearch));
-////		System.out.println("========================= "+ locations.size());
-//		
-//		return null;
-//	}
-
 	@Override
 	public PagesDto searchInfoOfLost(SearchDto dto, int items, int currentPage) {
-		// TODO Auto-generated method stub
-		
+
 		double radiusOfSearch = 100;		
 		Distance rad = new Distance(radiusOfSearch, Metrics.KILOMETERS);
-		List<LostFoundEntity> locations = repo.findByLocationWithin(new Circle(new Point(31.894216, 34.807623), rad));
+		Point p = new Point(31.894216, 34.807623);
+		List<LostFoundEntity> locations = repo.findByLocationNear(p, rad);
 		
 		System.out.println(locations.size());
 		return null;
 	}
-
-//		double[] aAdress = { 10, 10 };
-//		repo.save(loc);
-//		double[] bAdress = { 3, 3 };
-//		repo.save(loc2);
-
-		
-		
-
-//	Point point = new Point(35.35, 31.36);
-//	Distance distance = new Distance(200, Metrics.KILOMETERS);
-//	@SuppressWarnings("unused")
-//	GeoResults<LostFoundEntity> res = repo.findByLocationNear(point, distance);
 
 }

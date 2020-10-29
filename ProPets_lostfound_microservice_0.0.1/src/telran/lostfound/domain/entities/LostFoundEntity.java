@@ -24,10 +24,7 @@ public class LostFoundEntity {
 	private String[] tags;
 	private String[] photos;
 	private Address address;
-//	private GeolocationPointMongoDto location;
-//	@GeoSpatialIndexed
-//	@GeoSpatialIndexed(type = GeoSpatialIndexType.GEO_2DSPHERE)
-//	private double[] location;
+	
 	@GeoSpatialIndexed(name = "Location")
 	private double[] location;
 
@@ -48,7 +45,6 @@ public class LostFoundEntity {
 		this.tags = dto.tags;
 		this.photos = dto.photos;
 		this.address = dto.address;
-//		this.location = new GeolocationPointMongoDto(dto.location.longitude, dto.location.latitude);
 		double[] res = new double[2];
 		res[0] = dto.location.longitude;
 		res[1] = dto.location.latitude;

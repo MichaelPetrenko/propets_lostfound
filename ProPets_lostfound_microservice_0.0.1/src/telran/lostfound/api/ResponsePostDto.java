@@ -17,7 +17,6 @@ public class ResponsePostDto {
 	public String[] tags;
 	public String[] photos;
 	public Address address;
-//	public Location location;
 	public double[] location;
 	
 	public ResponsePostDto(LostFoundEntity ent) {
