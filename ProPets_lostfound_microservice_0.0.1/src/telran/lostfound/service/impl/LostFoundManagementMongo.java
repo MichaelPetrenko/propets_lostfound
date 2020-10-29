@@ -18,7 +18,6 @@ import org.springframework.web.client.RestTemplate;
 import telran.lostfound.api.LocationDto;
 import telran.lostfound.api.PagesDto;
 import telran.lostfound.api.RequestLostFoundDto;
-import telran.lostfound.api.ResponseGetPostsDto;
 import telran.lostfound.api.ResponseLostFoundDto;
 import telran.lostfound.api.ResponsePostDto;
 import telran.lostfound.api.SearchDto;
@@ -50,18 +49,18 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 			throw new NoContentException();
 		}
 
-		// TODO Here we need to check Location - if not ex-s - to make it from address.
+		// TODO Here we need to check Location - if not ex-s - to make it from address. LATER
 
 		LostFoundEntity entity = new LostFoundEntity(dto, lostOrFound, login);
 		repo.save(entity);
 
-//		double[] coord = entity.getLocation().getCoordinates();
 		double[] coord = entity.getLocation();
 
 		ResponseLostFoundDto resp = new ResponseLostFoundDto(entity.getId(), entity.getTypePost(),
 				entity.getUserLogin(), entity.getUserName(), entity.getAvatar(), entity.getDatePost(), entity.getType(),
 				entity.getSex(), entity.getBreed(), entity.getTags(), entity.getPhotos(), entity.getAddress(),
 				new LocationDto(coord[0], coord[1]));
+		
 		return resp;
 	}
 
@@ -83,7 +82,6 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 		res[0] = dto.location.longitude;
 		res[1] = dto.location.latitude;
 		entity.setLocation(res);
-//		entity.setLocation(new GeolocationPointMongoDto(dto.location.longitude, dto.location.latitude));
 		entity.setPhotos(dto.photos);
 		entity.setTags(dto.tags);
 		repo.save(entity);
@@ -206,9 +204,10 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 
 	@Override
 	public PagesDto getPostsOfLostFoundPets(int items, int currentPage, boolean typePost) {
+		
 		Pageable pageable = PageRequest.of(currentPage, items);
-	
-		int itemsTotal = repo.findAllByTypePost(typePost).size();
+
+		int itemsTotal = repo.findAllByTypePost(typePost).size(); 
 		List<LostFoundEntity> postsList = repo.findAllByTypePost(typePost, pageable);
 
 		PagesDto pDto = new PagesDto(items, currentPage, itemsTotal, postsList);
@@ -216,21 +215,21 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 	}
 
 	@Override
-	public ResponseGetPostsDto searchInfoOfFound(int items, int currentPage) {
-
-		return null;
-	}
-
-	@Override
-	public PagesDto searchInfoOfLost(SearchDto dto, int items, int currentPage) {
-
-		double radiusOfSearch = 100;		
-		Distance rad = new Distance(radiusOfSearch, Metrics.KILOMETERS);
-		Point p = new Point(31.894216, 34.807623);
-		List<LostFoundEntity> locations = repo.findByLocationNear(p, rad);
+	public PagesDto searchInfoOfLostOrFound(SearchDto dto, int items, int currentPage, boolean typePost) {
 		
-		System.out.println(locations.size());
-		return null;
+		Distance rad = new Distance(10, Metrics.KILOMETERS);
+		Point pointOfSearch = new Point(dto.location.longitude, dto.location.latitude);
+		
+		List<LostFoundEntity> locations = repo.findByLocationNear(pointOfSearch, rad, typePost);
+		int itemsTotal = locations.size();
+		
+		Pageable pageable = PageRequest.of(currentPage, items);
+		
+		List<LostFoundEntity> postsList = repo.findByLocationNear(pointOfSearch, rad, typePost, pageable);
+		
+		PagesDto pDto = new PagesDto(items, currentPage, itemsTotal, postsList);
+
+		return pDto;
 	}
 
 }

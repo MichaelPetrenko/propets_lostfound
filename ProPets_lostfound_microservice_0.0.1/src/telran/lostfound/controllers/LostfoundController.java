@@ -84,12 +84,17 @@ public class LostfoundController {
 	String[] getTagsAndcolorsOfPicture(@RequestParam String image_url) {
 		return lostfound.getTagsAndcolorsOfPicture(image_url);
 	}
-	
-//	String SEARCH_BY_INFORMATION_OF_LOST_PET = 	
+		
 //	"/lostfound/en/v1/lost/filter"
 	@PostMapping(value = LostFoundApiConstants.SEARCH_BY_INFORMATION_OF_LOST_PET)
-	PagesDto getGeoTest(@RequestBody SearchDto dto, @RequestParam int currentPage, @RequestParam int itemsOnPage) {
-		return lostfound.searchInfoOfLost(dto, itemsOnPage, currentPage);
+	PagesDto searchInfoOfLost(@RequestBody SearchDto dto, @RequestParam int currentPage, @RequestParam int itemsOnPage) {
+		return lostfound.searchInfoOfLostOrFound(dto, itemsOnPage, currentPage, false);
+	}
+	
+//	"/lostfound/en/v1/founds/filter"
+	@PostMapping(value = LostFoundApiConstants.SEARCH_BY_INFORMATION_OF_FOUND_PET)
+	PagesDto searchInfoOrFound(@RequestBody SearchDto dto, @RequestParam int currentPage, @RequestParam int itemsOnPage) {
+		return lostfound.searchInfoOfLostOrFound(dto, itemsOnPage, currentPage, true);
 	}
 	
 }

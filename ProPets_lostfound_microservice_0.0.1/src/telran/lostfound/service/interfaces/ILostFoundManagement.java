@@ -21,9 +21,9 @@ public interface ILostFoundManagement {
 	ResponsePostDto deletePostById(String postId);										//D get ret
 	ResponsePostDto updatePost(RequestLostFoundDto dto, String postId);					//D get ret
 	
-	ArrayList<ResponsePostDto> getUserDataListId(String[] posts);						//TODO FIXME TODO Location!!!!!!!!!!!!!!!!	
+	ArrayList<ResponsePostDto> getUserDataListId(String[] posts);						//v'r contro Location!!!!!!!!!!!!!!!!	
 	String[] getTagsAndcolorsOfPicture(String imageLink);								//D get ret
-	ResponseGetPostsDto searchInfoOfFound(int items, int currentPage);
-	PagesDto searchInfoOfLost(SearchDto dto, int items, int currentPage);
+	
+	PagesDto searchInfoOfLostOrFound(SearchDto dto, int items, int currentPage, boolean typePost);
 	
 }

@@ -3,7 +3,6 @@ package telran.lostfound.dao;
 import java.util.List;
 
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.geo.Circle;
 import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.Point;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -16,6 +15,8 @@ public interface LostfoundRepository extends MongoRepository<LostFoundEntity, St
 
 	List<LostFoundEntity> findAllByTypePost(boolean typePost, Pageable pageable);
 	List<LostFoundEntity> findAllByTypePost(boolean typePost);
-	List<LostFoundEntity> findByLocationWithin(Circle c);
-	List<LostFoundEntity> findByLocationNear(Point p, Distance d);
+	
+	List<LostFoundEntity> findByLocationNear(Point p, Distance d, boolean typePost);
+	List<LostFoundEntity> findByLocationNear(Point p, Distance d, boolean typePost, Pageable pageable);
+	
 }
