@@ -11,8 +11,8 @@ public interface LostFoundApiConstants {
 //	String GET_POSTS_OF_FOUND_PETS = 			"/lostfound/en/v1/founds?currentPage=0&itemsOnPage=2";
 	
 	String POST_BY_ID = 						"/lostfound/en/v1/{id}";
-	String SEARCH_BY_INFORMATION_OF_FOUND_PET = "/lostfound/en/v1/founds/filter?currentPage=0&itemsOnPage=5";
-//	String SEARCH_BY_INFORMATION_OF_FOUND_PET = "/lostfound/en/v1/founds/filter";
+	String SEARCH_BY_INFORMATION_OF_FOUND_PET = "/lostfound/en/v1/founds/filter";
+//	String SEARCH_BY_INFORMATION_OF_FOUND_PET = "/lostfound/en/v1/founds/filter?currentPage=0&itemsOnPage=5";
 	
 	String UPDATE_POST_FOUND_LOST_PET = 		"/lostfound/en/v1/{id}";
 	String TAGS_AND_COLORS_OF_PICTURE = 		"/lostfound/en/v1/tagscolors/";

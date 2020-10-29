@@ -3,6 +3,8 @@ package telran.lostfound.service.impl;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -217,18 +219,13 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 	@Override
 	public PagesDto searchInfoOfLostOrFound(SearchDto dto, int items, int currentPage, boolean typePost) {
 		
-		Distance rad = new Distance(10, Metrics.KILOMETERS);
+		Distance radiusOfSearch = new Distance(10, Metrics.KILOMETERS);
 		Point pointOfSearch = new Point(dto.location.longitude, dto.location.latitude);
-		
-		List<LostFoundEntity> locations = repo.findByLocationNear(pointOfSearch, rad, typePost);
-		int itemsTotal = locations.size();
-		
 		Pageable pageable = PageRequest.of(currentPage, items);
-		
-		List<LostFoundEntity> postsList = repo.findByLocationNear(pointOfSearch, rad, typePost, pageable);
-		
-		PagesDto pDto = new PagesDto(items, currentPage, itemsTotal, postsList);
 
+		List<LostFoundEntity> allFounds = repo.findByLocationNearAndTypePostAndType(pointOfSearch, radiusOfSearch, typePost, dto.type, pageable);
+		int itemsTotal = allFounds.size();
+		PagesDto pDto = new PagesDto(items, currentPage, itemsTotal, allFounds);
 		return pDto;
 	}
 

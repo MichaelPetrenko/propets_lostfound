@@ -16,7 +16,8 @@ public interface LostfoundRepository extends MongoRepository<LostFoundEntity, St
 	List<LostFoundEntity> findAllByTypePost(boolean typePost, Pageable pageable);
 	List<LostFoundEntity> findAllByTypePost(boolean typePost);
 	
-	List<LostFoundEntity> findByLocationNear(Point p, Distance d, boolean typePost);
-	List<LostFoundEntity> findByLocationNear(Point p, Distance d, boolean typePost, Pageable pageable);
+	List<LostFoundEntity> findByLocationNear(Point p, Distance d);
+	List<LostFoundEntity> findByLocationNear(Point p, Distance d, Pageable pageable);
+	List<LostFoundEntity> findByLocationNearAndTypePostAndType(Point p, Distance d, boolean typePost, String type, Pageable pageable);
 	
 }
