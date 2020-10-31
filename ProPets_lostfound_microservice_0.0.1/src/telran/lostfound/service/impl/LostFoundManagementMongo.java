@@ -51,7 +51,7 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 		// TODO Here we need to check Location - if not ex-s - to make it from address. LATER
 		
 		if (!checkCorrectDataLocation(dto.location)) {
-			throw new NoContentException();
+			throw new NoContentException("wrong data location");
 		};
 		
 		LostFoundEntity entity = new LostFoundEntity(dto, lostOrFound, login);
@@ -73,7 +73,7 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 			throw new NoContentException();
 		}
 		if (!checkCorrectDataLocation(dto.location)) {
-			throw new NoContentException();
+			throw new NoContentException("wrong data location!");
 		};
 		LostFoundEntity entity = repo.findById(postId).orElse(null);
 		if (entity == null) {
@@ -99,7 +99,7 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 	@Override
 	public ArrayList<ResponsePostDto> getUserDataListId(String[] posts) {
 		if(posts.length==0) {
-			throw new NoContentException();
+			throw new NoContentException("posts is empty!");
 		}
 		ArrayList<ResponsePostDto> res = new ArrayList<>();
 		for (String post : posts) {
@@ -146,7 +146,7 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 			String[] res = uniteArrays(tags, colors);
 			return res;
 		} catch (Exception e) {
-			throw new NoContentException();
+			throw new NoContentException("link on image is not correct");
 		}
 	}
 
@@ -233,7 +233,7 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 	public ResponsePagesDto searchInfoOfLostOrFound(RequestSearchDto dto, int items, int currentPage, boolean typePost) {
 		
 		if (!checkCorrectDataLocation(dto.location)) {
-			throw new NoContentException();
+			throw new NoContentException("wrong data location!");
 		};
 		
 		Distance radiusOfSearch = new Distance(10, Metrics.KILOMETERS);

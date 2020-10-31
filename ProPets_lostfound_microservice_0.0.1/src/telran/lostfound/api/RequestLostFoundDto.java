@@ -4,7 +4,6 @@ import telran.lostfound.domain.entities.Address;
 
 public class RequestLostFoundDto {
 
-//	TODO add public String login = ID;
 	public String userName;
 	public String avatar;
 	public String type;
