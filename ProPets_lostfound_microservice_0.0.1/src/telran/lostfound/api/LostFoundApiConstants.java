@@ -21,7 +21,8 @@ public interface LostFoundApiConstants {
 	String DELETE_POST_BY_ID = 					"/lostfound/en/v1/{id}";
 	String GET_USER_DATA_LIST_ID = 				"/lostfound/en/v1/userdata"; 
 	
-	String SEARCH_BY_INFORMATION_OF_LOST_PET = 	"/lostfound/en/v1/lost/filter";
+	String SEARCH_BY_INFORMATION_OF_LOST_PET = 	"/lostfound/en/v1/losts/filter";
 //	String SEARCH_BY_INFORMATION_OF_LOST_PET = 	"/lostfound/en/v1/lost/filter?currentPage=0&itemsOnPage=10";
+//	need to change on /losts/filter
 
 }
