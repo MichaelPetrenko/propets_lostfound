@@ -4,11 +4,13 @@ import telran.lostfound.domain.entities.Address;
 
 public class RequestLostFoundDto {
 
+//	TODO add public String login = ID;
 	public String userName;
 	public String avatar;
 	public String type;
 	public String sex;
 	public String breed;
+//	TODO if A->L, check A.
 	public Address address;
 	public LocationDto location;
 	public String[] photos;

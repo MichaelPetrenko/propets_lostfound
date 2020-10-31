@@ -69,7 +69,7 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 
 	@Override
 	public ResponsePostDto updatePost(RequestLostFoundDto dto, String postId) {
-		if (dto == null || postId == null) {
+		if (dto == null) {
 			throw new NoContentException();
 		}
 		if (!checkCorrectDataLocation(dto.location)) {
@@ -98,6 +98,9 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 
 	@Override
 	public ArrayList<ResponsePostDto> getUserDataListId(String[] posts) {
+		if(posts.length==0) {
+			throw new NoContentException();
+		}
 		ArrayList<ResponsePostDto> res = new ArrayList<>();
 		for (String post : posts) {
 			LostFoundEntity entity = repo.findById(post).orElse(null);
@@ -124,7 +127,13 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 
 	@Override
 	public ResponsePostDto deletePostById(String postId) {
+		if (postId == null) {
+			throw new NotExistsException();
+		}
 		ResponsePostDto resp = postById(postId);
+		if (resp == null) {
+			throw new NotExistsException();
+		}
 		repo.deleteById(resp.id);
 		return resp;
 	}
@@ -215,7 +224,7 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 
 		int itemsTotal = repo.findAllByTypePost(typePost).size(); 
 		List<LostFoundEntity> postsList = repo.findAllByTypePost(typePost, pageable);
-
+		
 		ResponsePagesDto pDto = new ResponsePagesDto(items, currentPage, itemsTotal, postsList);
 		return pDto;
 	}
@@ -242,6 +251,10 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 //		Valid longitude values are between -180 and 180, both inclusive.
 //	    Valid latitude values are between -90 and 90, both inclusive.
 
+		if(location==null) {
+			return false;
+		}
+		
 		if(location.longitude >=-180
 		&& location.longitude <=180
 		&& location.latitude >=-90
