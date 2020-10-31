@@ -47,9 +47,13 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 		if (dto == null) {
 			throw new NoContentException();
 		}
-
+		
 		// TODO Here we need to check Location - if not ex-s - to make it from address. LATER
-
+		
+		if (!checkCorrectDataLocation(dto.location)) {
+			throw new NoContentException();
+		};
+		
 		LostFoundEntity entity = new LostFoundEntity(dto, lostOrFound, login);
 		repo.save(entity);
 
@@ -68,6 +72,9 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 		if (dto == null || postId == null) {
 			throw new NoContentException();
 		}
+		if (!checkCorrectDataLocation(dto.location)) {
+			throw new NoContentException();
+		};
 		LostFoundEntity entity = repo.findById(postId).orElse(null);
 		if (entity == null) {
 			throw new NotExistsException();
@@ -216,6 +223,10 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 	@Override
 	public ResponsePagesDto searchInfoOfLostOrFound(RequestSearchDto dto, int items, int currentPage, boolean typePost) {
 		
+		if (!checkCorrectDataLocation(dto.location)) {
+			throw new NoContentException();
+		};
+		
 		Distance radiusOfSearch = new Distance(10, Metrics.KILOMETERS);
 		Point pointOfSearch = new Point(dto.location.longitude, dto.location.latitude);
 		Pageable pageable = PageRequest.of(currentPage, items);
@@ -224,6 +235,20 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 		int itemsTotal = repo.findByLocationNearAndTypePostAndType(pointOfSearch, radiusOfSearch, typePost, dto.type).size();
 		ResponsePagesDto pDto = new ResponsePagesDto(items, currentPage, itemsTotal, allFounds);
 		return pDto;
+	}
+	
+	private boolean checkCorrectDataLocation(LocationDto location) {
+		
+//		Valid longitude values are between -180 and 180, both inclusive.
+//	    Valid latitude values are between -90 and 90, both inclusive.
+
+		if(location.longitude >=-180
+		&& location.longitude <=180
+		&& location.latitude >=-90
+		&& location.latitude <=90) {
+			return true;
+		}else
+		return false;
 	}
 
 }
