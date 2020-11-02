@@ -20,11 +20,11 @@ public interface ILostFoundManagement {
 	ResponsePostDto postById(String postID); 												//DT get ret tested
 	
 	//Need another filter - checking author and roles
-	ResponsePostDto deletePostById(String postId);											//!!!!!!D get ret tested
-	ResponsePostDto updatePost(RequestLostFoundDto dto, String postId);						//!!!!!!D get ret tested
+	ResponsePostDto deletePostById(String postId);											//D get ret tested
+	ResponsePostDto updatePost(RequestLostFoundDto dto, String postId);						//D get ret tested
 	
 	//Dont need filter
-	ArrayList<ResponsePostDto> getUserDataListId(String[] posts);							//D tested (Address->Location?)
+	ArrayList<ResponsePostDto> getUserDataListId(String[] posts);							//DT (Address->Location?)
 	String[] getTagsAndcolorsOfPicture(String imageLink);									//DT
 	
 }
