@@ -50,6 +50,10 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 		
 		// TODO Here we need to check Location - if not ex-s - to make it from address. LATER
 		
+		if(dto.breed==null || dto.location==null || dto.tags==null || dto.type==null) {
+			throw new NoContentException("Wrond data!");
+		}
+		
 		if (!checkCorrectDataLocation(dto.location)) {
 			throw new NoContentException("wrong data location");
 		};

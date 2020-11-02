@@ -17,22 +17,25 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import telran.lostfound.api.codes.NoContentException;
-import telran.lostfound.api.imaga.TagsApiResult;
 
 @Service
-public class NewPostOfLostFoundsPetFilter implements Filter {
-	
-//	@Rest
+public class BasicFilter implements Filter {
 
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
 			throws IOException, ServletException {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) resp;
-//		String NEW_LOST_PET = 						"/lostfound/en/v1/lost/{login}";
-//		String NEW_FOUND_PET = 						"/lostfound/en/v1/found/{login}";
-		if (request.getServletPath().matches("/lostfound/en/v1/lost/[^/]+")
-		 || request.getServletPath().matches("/lostfound/en/v1/found/[^/]+")) {
+		String path = request.getServletPath();
+
+		if (path.matches("/lostfound/en/v1/lost/[^/]+")
+		 || path.matches("/lostfound/en/v1/found/[^/]+")
+		 || path.matches("/lostfound/en/v1/losts")
+		 || path.matches("/lostfound/en/v1/founds")
+		 || path.matches("/lostfound/en/v1/founds/filter")
+		 || path.matches("/lostfound/en/v1/losts/filter")
+		 || path.matches("/lostfound/en/v1/post/[^/]+")
+		 ) {
 			
 				RestTemplate restTemplate = new RestTemplate();
 				String endPointTags = "https://propets-me.herokuapp.com/account/en/v1/token/validation";
@@ -43,14 +46,24 @@ public class NewPostOfLostFoundsPetFilter implements Filter {
 					throw new NoContentException();
 				}
 				String xToken = request.getHeader("X-Token");
+				if(xToken==null || xToken=="") {
+					response.sendError(401);
+					return;
+				}
 				RequestEntity<Void> requestToValidation = RequestEntity.get(uri).header("X-Token", xToken ).build();
-				System.out.println(" = = = = trying get responce");
-				ResponseEntity<Foo> responseFromValidation = restTemplate.exchange(requestToValidation, Foo.class);
-				String newToken = responseFromValidation.getHeaders().get("X-Token").get(0);
-				response.setHeader(xToken, newToken);
-				System.out.println(" = = = = end of filter");
+				try {
+					ResponseEntity<String> responseFromValidation = restTemplate.exchange(requestToValidation, String.class);
+					String newToken = responseFromValidation.getHeaders().get("X-Token").get(0);
+					response.setHeader("X-Token", newToken);
+				} catch (Exception e) {
+					response.sendError(403);
+					return;
+				}
+				chain.doFilter(request, response);
 				return;
+				
 		}
+		
 
 	}
 }

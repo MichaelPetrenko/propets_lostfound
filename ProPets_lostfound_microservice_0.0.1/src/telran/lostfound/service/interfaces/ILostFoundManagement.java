@@ -11,19 +11,20 @@ import telran.lostfound.api.ResponseLostFoundDto;
 
 public interface ILostFoundManagement {
 	
-//	new post 2
+	//Needs basic filter
 	ResponseLostFoundDto newLostOrFoundPet(RequestLostFoundDto dto, String login, boolean lostOrFound) 
-			throws URISyntaxException; 														//D get ret	tested unfinal
-//	get post 2
-	ResponsePagesDto getPostsOfLostFoundPets(int items, int currentPage, boolean typePost);	//D get ret	tested
-//	search info 2
+			throws URISyntaxException; 														//DT get ret
+	ResponsePagesDto getPostsOfLostFoundPets(int items, int currentPage, boolean typePost);	//DT get ret
 	ResponsePagesDto searchInfoOfLostOrFound(
-			RequestSearchDto dto, int items, int currentPage, boolean typePost); 			//D get ret tested
+			RequestSearchDto dto, int items, int currentPage, boolean typePost); 			//DT get ret
+	ResponsePostDto postById(String postID); 												//DT get ret tested
 	
-	ResponsePostDto postById(String postID); 												//D get ret tested
-	ResponsePostDto deletePostById(String postId);											//D get ret tested
-	ResponsePostDto updatePost(RequestLostFoundDto dto, String postId);						//D get ret tested
+	//Need another filter - checking author and roles
+	ResponsePostDto deletePostById(String postId);											//!!!!!!D get ret tested
+	ResponsePostDto updatePost(RequestLostFoundDto dto, String postId);						//!!!!!!D get ret tested
+	
+	//Dont need filter
 	ArrayList<ResponsePostDto> getUserDataListId(String[] posts);							//D tested (Address->Location?)
-	String[] getTagsAndcolorsOfPicture(String imageLink);									//D get ret	tested
+	String[] getTagsAndcolorsOfPicture(String imageLink);									//DT
 	
 }
