@@ -20,7 +20,6 @@ import org.springframework.web.client.RestTemplate;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
-import telran.lostfound.api.ResponsePostDto;
 import telran.lostfound.api.codes.NoContentException;
 import telran.lostfound.service.interfaces.ILostFoundManagement;
 
@@ -70,7 +69,7 @@ public class AdvancedFilterAddPost implements Filter{
 			}
 			
 			String login = request.getServletPath().split("/")[5];
-			String loginToken = decompileToken(xToken)[0];
+			String loginToken = decompiledToken[0];
 			if(!login.equals(loginToken)) {
 				response.sendError(400);
 				return;
