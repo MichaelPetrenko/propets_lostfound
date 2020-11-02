@@ -28,9 +28,8 @@ public class BasicFilter implements Filter {
 		HttpServletResponse response = (HttpServletResponse) resp;
 		String path = request.getServletPath();
 
-		if (path.matches("/lostfound/en/v1/lost/[^/]+")
-		 || path.matches("/lostfound/en/v1/found/[^/]+")
-		 || path.matches("/lostfound/en/v1/losts")
+		if (
+		    path.matches("/lostfound/en/v1/losts")
 		 || path.matches("/lostfound/en/v1/founds")
 		 || path.matches("/lostfound/en/v1/founds/filter")
 		 || path.matches("/lostfound/en/v1/losts/filter")

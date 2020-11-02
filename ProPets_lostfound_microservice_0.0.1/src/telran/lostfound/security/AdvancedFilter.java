@@ -53,6 +53,8 @@ public class AdvancedFilter implements Filter{
 		
 		if (path.matches("/lostfound/en/v1/update/[^/]+")
 		 || path.matches("/lostfound/en/v1/delete/[^/]+")
+		 || path.matches("/lostfound/en/v1/lost/[^/]+")
+		 || path.matches("/lostfound/en/v1/found/[^/]+")
 		 ){
 			String xToken = request.getHeader("X-Token");
 			if(xToken==null || xToken=="") {
