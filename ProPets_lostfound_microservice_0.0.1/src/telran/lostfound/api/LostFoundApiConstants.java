@@ -15,11 +15,11 @@ public interface LostFoundApiConstants {
 	String SEARCH_BY_INFORMATION_OF_LOST_PET = 	"/lostfound/en/v1/losts/filter"; //Changed to "lostS"
 //	String SEARCH_BY_INFORMATION_OF_LOST_PET = 	"/lostfound/en/v1/lost/filter?currentPage=0&itemsOnPage=10";
 	
-	String UPDATE_POST_FOUND_LOST_PET = 		"/lostfound/en/v1/{id}";
+	String UPDATE_POST_FOUND_LOST_PET = 		"/lostfound/en/v1/update/{id}"; //Added "update"
+	String DELETE_POST_BY_ID = 					"/lostfound/en/v1/delete/{id}"; //Added "delete"
 	String TAGS_AND_COLORS_OF_PICTURE = 		"/lostfound/en/v1/tagscolors/";
 //	String TAGS_AND_COLORS_OF_PICTURE = 		"/lostfound/en/v1/tagscolors/?image_url=URL";
 	
-	String DELETE_POST_BY_ID = 					"/lostfound/en/v1/{id}";
 	String GET_USER_DATA_LIST_ID = 				"/lostfound/en/v1/userdata"; 
 
 }
