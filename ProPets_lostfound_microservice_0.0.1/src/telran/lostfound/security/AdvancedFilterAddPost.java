@@ -25,7 +25,7 @@ import telran.lostfound.api.codes.NoContentException;
 import telran.lostfound.service.interfaces.ILostFoundManagement;
 
 @Service
-public class AdvancedFilter implements Filter{
+public class AdvancedFilterAddPost implements Filter{
 	
 	@Autowired
 	ILostFoundManagement lostfound;
@@ -53,6 +53,8 @@ public class AdvancedFilter implements Filter{
 		
 		if (path.matches("/lostfound/en/v1/update/[^/]+")
 		 || path.matches("/lostfound/en/v1/delete/[^/]+")
+		 || path.matches("/lostfound/en/v1/lost/[^/]+")
+		 || path.matches("/lostfound/en/v1/found/[^/]+")
 		 ){
 			String xToken = request.getHeader("X-Token");
 			if(xToken==null || xToken=="") {
@@ -67,16 +69,10 @@ public class AdvancedFilter implements Filter{
 				return;
 			}
 			
-			String postPath = request.getServletPath().split("/")[5];
-			ResponsePostDto post = new ResponsePostDto();
-			try {
-				post = lostfound.postById(postPath);
-			} catch (Exception e) {
+			String login = request.getServletPath().split("/")[5];
+			String loginToken = decompileToken(xToken)[0];
+			if(!login.equals(loginToken)) {
 				response.sendError(400);
-				return;
-			}
-			if(!decompiledToken[0].equals(post.userLogin)) {
-				response.sendError(403);
 				return;
 			}
 			
