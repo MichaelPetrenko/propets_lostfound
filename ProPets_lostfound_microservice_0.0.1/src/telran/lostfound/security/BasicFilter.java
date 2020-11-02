@@ -37,8 +37,7 @@ public class BasicFilter implements Filter {
 		 || path.matches("/lostfound/en/v1/post/[^/]+")
 		 ) {
 			
-			System.out.println("==============INSIDE BASIC FILTER!!!!!!!!!!!!!!!!!================");	
-			RestTemplate restTemplate = new RestTemplate();
+				RestTemplate restTemplate = new RestTemplate();
 				String endPointTags = "https://propets-me.herokuapp.com/account/en/v1/token/validation";
 				URI uri;
 				try {
@@ -60,10 +59,7 @@ public class BasicFilter implements Filter {
 					response.sendError(403);
 					return;
 				}
-				chain.doFilter(request, response);
-				return;
-				
 		}
-		
+		chain.doFilter(request, response);
 	}
 }
