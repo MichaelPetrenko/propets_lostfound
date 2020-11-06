@@ -14,7 +14,7 @@ public class TokenValidationRequestor {
 	
 	public String validateToken(String token) {
 		
-		String endPoint = "http://localhost:8082/validation/en/v1/validate";
+		String endPoint = "http://propets-token.herokuapp.com/validation/en/v1/validate";
 		RestTemplate restTemplate = new RestTemplate();
 
 		URI uri;
@@ -35,7 +35,7 @@ public class TokenValidationRequestor {
 	}
 	
 	public String[] decompileToken(String token) {
-		String endPoint = "http://localhost:8082/validation/en/v1/decompile";
+		String endPoint = "http://propets-token.herokuapp.com/validation/en/v1/decompile";
 		RestTemplate restTemplate = new RestTemplate();
 
 		URI uri;
