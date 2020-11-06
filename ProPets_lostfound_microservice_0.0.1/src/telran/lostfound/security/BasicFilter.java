@@ -1,8 +1,6 @@
 package telran.lostfound.security;
 
 import java.io.IOException;
-import java.net.URI;
-
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -11,12 +9,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.http.RequestEntity;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
-import telran.lostfound.api.codes.NoContentException;
+import telran.lostfound.service.TokenValidationRequestor;
 
 @Service
 public class BasicFilter implements Filter {
@@ -35,24 +29,16 @@ public class BasicFilter implements Filter {
 		 || path.matches("/lostfound/en/v1/losts/filter")
 		 || path.matches("/lostfound/en/v1/post/[^/]+")
 		 ) {
-			
-				RestTemplate restTemplate = new RestTemplate();
-				String endPointTags = "https://propets-me.herokuapp.com/account/en/v1/token/validation";
-				URI uri;
-				try {
-					uri = new URI(endPointTags);
-				} catch (Exception e) {
-					throw new NoContentException();
-				}
+
 				String xToken = request.getHeader("X-Token");
 				if(xToken==null || xToken=="") {
 					response.sendError(401);
 					return;
 				}
-				RequestEntity<Void> requestToValidation = RequestEntity.get(uri).header("X-Token", xToken ).build();
+				
 				try {
-					ResponseEntity<String> responseFromValidation = restTemplate.exchange(requestToValidation, String.class);
-					String newToken = responseFromValidation.getHeaders().get("X-Token").get(0);
+					TokenValidationRequestor tvr = new TokenValidationRequestor();
+					String newToken = tvr.validateToken(xToken);
 					response.setHeader("X-Token", newToken);
 				} catch (Exception e) {
 					response.sendError(403);
