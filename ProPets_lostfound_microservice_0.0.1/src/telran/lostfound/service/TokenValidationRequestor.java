@@ -8,6 +8,7 @@ import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import telran.lostfound.api.codes.BadTokenException;
 import telran.lostfound.api.codes.NoContentException;
 
 public class TokenValidationRequestor {
@@ -24,12 +25,16 @@ public class TokenValidationRequestor {
 			throw new NoContentException();
 		}
 
-		RequestEntity<String> requestToValidateToken = RequestEntity.post(uri)
-				.accept(MediaType.APPLICATION_JSON)
-				.body(token);
-
-		ResponseEntity<String> responceFromValidateToken = restTemplate.exchange
-				(uri, HttpMethod.POST, requestToValidateToken, String.class);
+		ResponseEntity<String> responceFromValidateToken;
+		try {
+			RequestEntity<String> requestToValidateToken = RequestEntity.post(uri)
+					.accept(MediaType.APPLICATION_JSON)
+					.body(token);
+			responceFromValidateToken = restTemplate.exchange
+					(uri, HttpMethod.POST, requestToValidateToken, String.class);
+		} catch (Exception e) {
+			throw new BadTokenException();
+		}
 
 		return responceFromValidateToken.getBody().toString();
 	}
@@ -45,11 +50,16 @@ public class TokenValidationRequestor {
 			throw new NoContentException();
 		}
 
-		RequestEntity<String> requestToDecompile = RequestEntity.post(uri).accept(MediaType.APPLICATION_JSON)
-				.body(token);
-
-		ResponseEntity<String[]> responceFromDecompile = restTemplate.exchange(uri, HttpMethod.POST, 
-				requestToDecompile, String[].class);
+		ResponseEntity<String[]> responceFromDecompile;
+		try {
+			RequestEntity<String> requestToDecompile = RequestEntity.post(uri).accept(MediaType.APPLICATION_JSON)
+					.body(token);
+			responceFromDecompile = restTemplate.exchange(uri, HttpMethod.POST, 
+					requestToDecompile, String[].class);
+		} catch (Exception e) {
+			throw new BadTokenException();
+		}
+		
 		return responceFromDecompile.getBody();
 	}
 }
