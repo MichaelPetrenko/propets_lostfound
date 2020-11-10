@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.Metrics;
 import org.springframework.data.geo.Point;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -266,6 +267,31 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 			return true;
 		}else
 		return false;
+	}
+	
+	//======= HERE WE TRYING TO WORK WITH GEOLOCATION=============================================
+	
+	private void addressToLocation() {
+		String address = "HaShaked 103 Rehovot Israel";
+		String endPoint = "https://eu1.locationiq.com/v1/search.php?key=pk.9f0a8abe69f5422bb71ffebc3f77edde&q="+address+"&format=json";
+		RestTemplate restTemplate = new RestTemplate();
+
+		URI uri = null;
+		try {
+			uri = new URI(endPoint);
+		} catch (Exception e) {
+			System.out.println("Error URI");
+		}
+
+		ResponseEntity<Void> responce;
+		try {
+			RequestEntity<Void> request = RequestEntity.get(uri).build();
+			
+			responce = restTemplate.exchange
+					(uri, HttpMethod.GET, request, Void.class);
+		} catch (Exception e) {
+			System.out.println("Error");
+		}
 	}
 
 }
