@@ -2,20 +2,27 @@ package telran.lostfound.service.impl;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
+import org.apache.tomcat.jni.Address;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.Metrics;
 import org.springframework.data.geo.Point;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import telran.lostfound.api.LocationDto;
+import telran.lostfound.api.LocationIQDto;
 import telran.lostfound.api.ResponsePagesDto;
 import telran.lostfound.api.RequestLostFoundDto;
 import telran.lostfound.api.ResponseLostFoundDto;
@@ -48,17 +55,24 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 		if (dto == null) {
 			throw new NoContentException();
 		}
+
+		// TODO Here we need to check Location - if not ex-s - to make it from address.
+		// LATER
+//		Adress adress = new Adress
+//		String address = "HaShaked 103 Rehovot Israel";
+//		System.out.println(addressToLocation(address));
 		
-		// TODO Here we need to check Location - if not ex-s - to make it from address. LATER
 		
-		if(dto.breed==null || dto.location==null || dto.tags==null || dto.type==null) {
+
+		if (dto.breed == null || dto.location == null || dto.tags == null || dto.type == null) {
 			throw new NoContentException("Wrond data!");
 		}
-		
+
 		if (!checkCorrectDataLocation(dto.location)) {
 			throw new NoContentException("wrong data location");
-		};
-		
+		}
+		;
+
 		LostFoundEntity entity = new LostFoundEntity(dto, lostOrFound, login);
 		repo.save(entity);
 
@@ -68,7 +82,7 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 				entity.getUserLogin(), entity.getUserName(), entity.getAvatar(), entity.getDatePost(), entity.getType(),
 				entity.getSex(), entity.getBreed(), entity.getTags(), entity.getPhotos(), entity.getAddress(),
 				new LocationDto(coord[0], coord[1]));
-		
+
 		return resp;
 	}
 
@@ -79,7 +93,8 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 		}
 		if (!checkCorrectDataLocation(dto.location)) {
 			throw new NoContentException("wrong data location!");
-		};
+		}
+		;
 		LostFoundEntity entity = repo.findById(postId).orElse(null);
 		if (entity == null) {
 			throw new NotExistsException();
@@ -103,7 +118,7 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 
 	@Override
 	public ArrayList<ResponsePostDto> getUserDataListId(String[] posts) {
-		if(posts.length==0) {
+		if (posts.length == 0) {
 			throw new NoContentException("posts is empty!");
 		}
 		ArrayList<ResponsePostDto> res = new ArrayList<>();
@@ -224,56 +239,60 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 
 	@Override
 	public ResponsePagesDto getPostsOfLostFoundPets(int items, int currentPage, boolean typePost) {
-		
+
 		Pageable pageable = PageRequest.of(currentPage, items);
 
-		int itemsTotal = repo.findAllByTypePost(typePost).size(); 
+		int itemsTotal = repo.findAllByTypePost(typePost).size();
 		List<LostFoundEntity> postsList = repo.findAllByTypePost(typePost, pageable);
-		
+
 		ResponsePagesDto pDto = new ResponsePagesDto(items, currentPage, itemsTotal, postsList);
 		return pDto;
 	}
 
 	@Override
-	public ResponsePagesDto searchInfoOfLostOrFound(RequestSearchDto dto, int items, int currentPage, boolean typePost) {
-		
+	public ResponsePagesDto searchInfoOfLostOrFound(RequestSearchDto dto, int items, int currentPage,
+			boolean typePost) {
+
 		if (!checkCorrectDataLocation(dto.location)) {
 			throw new NoContentException("wrong data location!");
-		};
-		
+		}
+		;
+
 		Distance radiusOfSearch = new Distance(10, Metrics.KILOMETERS);
 		Point pointOfSearch = new Point(dto.location.longitude, dto.location.latitude);
 		Pageable pageable = PageRequest.of(currentPage, items);
 
-		List<LostFoundEntity> allFounds = repo.findByLocationNearAndTypePostAndType(pointOfSearch, radiusOfSearch, typePost, dto.type, pageable);
-		int itemsTotal = repo.findByLocationNearAndTypePostAndType(pointOfSearch, radiusOfSearch, typePost, dto.type).size();
+		List<LostFoundEntity> allFounds = repo.findByLocationNearAndTypePostAndType(pointOfSearch, radiusOfSearch,
+				typePost, dto.type, pageable);
+		int itemsTotal = repo.findByLocationNearAndTypePostAndType(pointOfSearch, radiusOfSearch, typePost, dto.type)
+				.size();
 		ResponsePagesDto pDto = new ResponsePagesDto(items, currentPage, itemsTotal, allFounds);
 		return pDto;
 	}
-	
+
 	private boolean checkCorrectDataLocation(LocationDto location) {
-		
+
 //		Valid longitude values are between -180 and 180, both inclusive.
 //	    Valid latitude values are between -90 and 90, both inclusive.
 
-		if(location==null) {
+		if (location == null) {
 			return false;
 		}
-		
-		if(location.longitude >=-180
-		&& location.longitude <=180
-		&& location.latitude >=-90
-		&& location.latitude <=90) {
+
+		if (location.longitude >= -180 && location.longitude <= 180 && location.latitude >= -90
+				&& location.latitude <= 90) {
 			return true;
-		}else
-		return false;
+		} else
+			return false;
 	}
-	
-	//======= HERE WE TRYING TO WORK WITH GEOLOCATION=============================================
-	
-	private void addressToLocation() {
-		String address = "HaShaked 103 Rehovot Israel";
-		String endPoint = "https://eu1.locationiq.com/v1/search.php?key=pk.9f0a8abe69f5422bb71ffebc3f77edde&q="+address+"&format=json";
+
+	// ======= HERE WE TRYING TO WORK WITH
+	// GEOLOCATION=============================================
+
+	private LocationDto addressToLocation(Address address) {
+		
+		String endPoint = "https://eu1.locationiq.com/v1/search.php?key=pk.9f0a8abe69f5422bb71ffebc3f77edde&q="
+				+ address + "&format=json";
 		RestTemplate restTemplate = new RestTemplate();
 
 		URI uri = null;
@@ -283,15 +302,18 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 			System.out.println("Error URI");
 		}
 
-		ResponseEntity<Void> responce;
-		try {
-			RequestEntity<Void> request = RequestEntity.get(uri).build();
-			
-			responce = restTemplate.exchange
-					(uri, HttpMethod.GET, request, Void.class);
-		} catch (Exception e) {
-			System.out.println("Error");
-		}
+		HttpHeaders headers = new HttpHeaders();
+
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+
+		HttpEntity<String> req = new HttpEntity<>(headers);
+
+		ResponseEntity<LocationIQDto[]> responce = restTemplate.exchange(uri, HttpMethod.GET, req, LocationIQDto[].class);
+//		RequestEntity<Void> request = RequestEntity.get(uri).build();
+		LocationDto result = new LocationDto(responce.getBody()[0].lon, responce.getBody()[0].lat);
+		
+		return result;
 	}
 
 }

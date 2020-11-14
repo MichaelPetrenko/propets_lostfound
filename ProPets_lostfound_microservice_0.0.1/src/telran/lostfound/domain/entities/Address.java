@@ -19,4 +19,11 @@ public class Address {
 		super();
 	}
 
+	@Override
+	public String toString() {
+		return "Address [country=" + country + ", city=" + city + ", street=" + street + ", building=" + building
+				+ ", getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()=" + super.toString()
+				+ "]";
+	}
+
 }
