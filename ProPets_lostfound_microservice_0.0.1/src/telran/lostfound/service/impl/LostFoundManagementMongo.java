@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.tomcat.jni.Address;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -37,6 +36,7 @@ import telran.lostfound.api.imaga.Tag;
 import telran.lostfound.api.imaga.Tags;
 import telran.lostfound.api.imaga.TagsApiResult;
 import telran.lostfound.dao.LostfoundRepository;
+import telran.lostfound.domain.entities.Address;
 import telran.lostfound.domain.entities.LostFoundEntity;
 import telran.lostfound.service.interfaces.ILostFoundManagement;
 
@@ -60,7 +60,8 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 		// LATER
 //		Adress adress = new Adress
 //		String address = "HaShaked 103 Rehovot Israel";
-//		System.out.println(addressToLocation(address));
+		System.out.println(addressToLocation(dto.address));
+		
 		
 		
 
@@ -291,8 +292,9 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 
 	private LocationDto addressToLocation(Address address) {
 		
+		String addressString = address.toString();
 		String endPoint = "https://eu1.locationiq.com/v1/search.php?key=pk.9f0a8abe69f5422bb71ffebc3f77edde&q="
-				+ address + "&format=json";
+				+ addressString + "&format=json";
 		RestTemplate restTemplate = new RestTemplate();
 
 		URI uri = null;

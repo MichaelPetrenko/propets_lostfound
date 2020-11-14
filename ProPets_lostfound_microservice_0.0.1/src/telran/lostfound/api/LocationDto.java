@@ -12,4 +12,11 @@ public class LocationDto {
 	}
 	
 	public LocationDto() {}
+
+	@Override
+	public String toString() {
+		return "lon = " + longitude + ", lat = " + latitude;
+	}
+	
+	
 }
