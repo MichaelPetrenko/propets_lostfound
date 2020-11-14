@@ -22,6 +22,7 @@ import telran.lostfound.api.RequestLostFoundDto;
 import telran.lostfound.api.ResponseLostFoundDto;
 import telran.lostfound.api.ResponsePostDto;
 import telran.lostfound.api.RequestSearchDto;
+import telran.lostfound.api.codes.BadURIException;
 import telran.lostfound.api.codes.NoContentException;
 import telran.lostfound.api.codes.NotExistsException;
 import telran.lostfound.api.imaga.Color;
@@ -301,7 +302,7 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 		} catch (Exception e) {
 			System.out.println("Error URI");
 			e.printStackTrace();
-			throw new NoContentException();
+			throw new BadURIException();
 		}
 
 		RequestEntity<Void> request = RequestEntity.get(uri).build();
