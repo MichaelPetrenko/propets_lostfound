@@ -2,7 +2,6 @@ package telran.lostfound.service.impl;
 
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +10,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.Metrics;
 import org.springframework.data.geo.Point;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -60,7 +55,10 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 		// LATER
 //		Adress adress = new Adress
 //		String address = "HaShaked 103 Rehovot Israel";
-		System.out.println(addressToLocation(dto.address));
+		/**
+		 *  We have a trouble, if URI contains whitespace characters
+		 */
+		System.out.println(addressToLocation(dto.address).toString());
 		
 		
 		
@@ -297,23 +295,18 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 				+ addressString + "&format=json";
 		RestTemplate restTemplate = new RestTemplate();
 
-		URI uri = null;
+		URI uri;
 		try {
 			uri = new URI(endPoint);
 		} catch (Exception e) {
 			System.out.println("Error URI");
+			e.printStackTrace();
+			throw new NoContentException();
 		}
 
-		HttpHeaders headers = new HttpHeaders();
-
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-
-		HttpEntity<String> req = new HttpEntity<>(headers);
-
-		ResponseEntity<LocationIQDto[]> responce = restTemplate.exchange(uri, HttpMethod.GET, req, LocationIQDto[].class);
-//		RequestEntity<Void> request = RequestEntity.get(uri).build();
-		LocationDto result = new LocationDto(responce.getBody()[0].lon, responce.getBody()[0].lat);
+		RequestEntity<Void> request = RequestEntity.get(uri).build();
+		ResponseEntity<LocationIQDto[]> response = restTemplate.exchange(request, LocationIQDto[].class);
+		LocationDto result = new LocationDto(response.getBody()[0].lon, response.getBody()[0].lat);
 		
 		return result;
 	}
