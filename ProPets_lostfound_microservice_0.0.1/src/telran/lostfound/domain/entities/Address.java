@@ -21,7 +21,7 @@ public class Address {
 
 	@Override
 	public String toString() {
-		return street.replace(" ", "")+","+building.replace(" ", "")+","+city.replace(" ", "")+","+country.replace(" ", "");
+		return street.replace(" ", "+")+","+building.replace(" ", "+")+","+city.replace(" ", "+")+","+country.replace(" ", "+");
 	}
 
 }

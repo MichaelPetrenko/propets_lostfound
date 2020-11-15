@@ -52,14 +52,17 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 			throw new NoContentException();
 		}
 
-		// TODO Here we need to check Location - if not ex-s - to make it from address.
-		// LATER
-//		Adress adress = new Adress
-//		String address = "HaShaked 103 Rehovot Israel";
-		/**
-		 *  We have a trouble, if URI contains whitespace characters
-		 */
-		System.out.println(addressToLocation(dto.address).toString());
+		if(Double.compare(dto.location.latitude, 0)==0 || Double.compare(dto.location.longitude, 0)==0) {
+			
+			LocationDto locationFromAddress;
+			try {
+				locationFromAddress = addressToLocation(dto.address);
+			} catch (Exception e) {
+				throw new NoContentException();
+			}
+			dto.location = locationFromAddress;
+		}
+//		System.out.println(addressToLocation(dto.address).toString());
 		
 		
 		
@@ -285,9 +288,6 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 		} else
 			return false;
 	}
-
-	// ======= HERE WE TRYING TO WORK WITH
-	// GEOLOCATION=============================================
 
 	private LocationDto addressToLocation(Address address) {
 		
