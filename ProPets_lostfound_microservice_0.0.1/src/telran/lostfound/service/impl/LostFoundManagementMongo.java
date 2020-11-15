@@ -97,7 +97,7 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 		if (!checkCorrectDataLocation(dto.location)) {
 			throw new NoContentException("wrong data location!");
 		}
-		;
+		
 		LostFoundEntity entity = repo.findById(postId).orElse(null);
 		if (entity == null) {
 			throw new NotExistsException();
