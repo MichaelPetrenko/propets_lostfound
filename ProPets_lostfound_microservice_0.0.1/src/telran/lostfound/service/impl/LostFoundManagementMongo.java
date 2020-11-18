@@ -2,6 +2,7 @@ package telran.lostfound.service.impl;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +11,21 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.Metrics;
 import org.springframework.data.geo.Point;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.HttpClientErrorException.BadRequest;
+import org.springframework.web.client.HttpClientErrorException.Forbidden;
+import org.springframework.web.client.HttpClientErrorException.Unauthorized;
 
+import telran.lostfound.api.codes.BadRequestException;
+import telran.lostfound.api.codes.BadTokenException;
+import telran.lostfound.api.codes.ForbiddenException;
 import telran.lostfound.api.LocationDto;
 import telran.lostfound.api.LocationIQDto;
 import telran.lostfound.api.ResponsePagesDto;
@@ -46,26 +57,28 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 	@Autowired
 	LostfoundRepository repo;
 
+	@Autowired
+	RestTemplate restTemplate;
+
 	@Override
-	public ResponseLostFoundDto newLostOrFoundPet(RequestLostFoundDto dto, String login, boolean lostOrFound) {
+	public ResponseLostFoundDto newLostOrFoundPet(RequestLostFoundDto dto, String login, boolean lostOrFound,
+			String xToken) {
+
 		if (dto == null) {
 			throw new NoContentException();
 		}
 
-		if(Double.compare(dto.location.latitude, 0)==0 || Double.compare(dto.location.longitude, 0)==0) {
-			
+		if (Double.compare(dto.location.latitude, 0) == 0 || Double.compare(dto.location.longitude, 0) == 0) {
 			LocationDto locationFromAddress;
+
 			try {
 				locationFromAddress = addressToLocation(dto.address);
 			} catch (Exception e) {
 				throw new NoContentException();
 			}
+
 			dto.location = locationFromAddress;
 		}
-//		System.out.println(addressToLocation(dto.address).toString());
-		
-		
-		
 
 		if (dto.breed == null || dto.location == null || dto.tags == null || dto.type == null) {
 			throw new NoContentException("Wrond data!");
@@ -78,6 +91,23 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 
 		LostFoundEntity entity = new LostFoundEntity(dto, lostOrFound, login);
 		repo.save(entity);
+		
+		String id = entity.getId();
+		
+		try { 
+			addPostToActivites(login, xToken, id); 
+		} catch (Exception e) {
+			if (e instanceof Forbidden) {
+				throw new ForbiddenException();
+			}
+			else if (e instanceof Unauthorized) {
+				throw new BadTokenException();
+			}
+			else if (e instanceof BadRequest) {	
+				throw new BadRequestException();
+			}
+			else throw new NotExistsException();
+		}
 
 		double[] coord = entity.getLocation();
 
@@ -89,6 +119,35 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 		return resp;
 	}
 
+	private void addPostToActivites(String login, String xToken, String entityId) {
+		
+		String endpointAddActivity = "https://propets-me.herokuapp.com/" + 
+		"account/en/v1/" 
+				+ login 
+				+ "/activity/" //it's a {serviceName}
+				+ entityId;
+
+		URI uri;
+		try {
+			uri = new URI(endpointAddActivity);
+		} catch (Exception e) {
+			System.out.println("Error URI");
+			throw new BadURIException();
+		}
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+		headers.set("X-Token", xToken);
+		headers.set("X-ServiceName", "lostFound");
+
+
+		HttpEntity<Void> request = new HttpEntity<>(headers);
+		@SuppressWarnings("unused")
+		ResponseEntity<Void> responceFromAddUserActivity = 
+				restTemplate.exchange(uri, HttpMethod.PUT, request, Void.class);
+	}
+
 	@Override
 	public ResponsePostDto updatePost(RequestLostFoundDto dto, String postId) {
 		if (dto == null) {
@@ -97,7 +156,7 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 		if (!checkCorrectDataLocation(dto.location)) {
 			throw new NoContentException("wrong data location!");
 		}
-		
+
 		LostFoundEntity entity = repo.findById(postId).orElse(null);
 		if (entity == null) {
 			throw new NotExistsException();
@@ -158,6 +217,7 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 			throw new NotExistsException();
 		}
 		repo.deleteById(resp.id);
+//		void removeUserActivity(String email, String postID, String xServiceName);
 		return resp;
 	}
 
@@ -290,7 +350,7 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 	}
 
 	private LocationDto addressToLocation(Address address) {
-		
+
 		String addressString = address.toString();
 		String endPoint = "https://eu1.locationiq.com/v1/search.php?key=pk.9f0a8abe69f5422bb71ffebc3f77edde&q="
 				+ addressString + "&format=json";
@@ -308,7 +368,7 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 		RequestEntity<Void> request = RequestEntity.get(uri).build();
 		ResponseEntity<LocationIQDto[]> response = restTemplate.exchange(request, LocationIQDto[].class);
 		LocationDto result = new LocationDto(response.getBody()[0].lon, response.getBody()[0].lat);
-		
+
 		return result;
 	}
 

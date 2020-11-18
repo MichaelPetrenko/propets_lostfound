@@ -12,7 +12,7 @@ import telran.lostfound.api.ResponseLostFoundDto;
 public interface ILostFoundManagement {
 	
 	//Needs basic filter
-	ResponseLostFoundDto newLostOrFoundPet(RequestLostFoundDto dto, String login, boolean lostOrFound) 
+	ResponseLostFoundDto newLostOrFoundPet(RequestLostFoundDto dto, String login, boolean lostOrFound, String xToken) 
 			throws URISyntaxException; 														//DT get ret
 	ResponsePagesDto getPostsOfLostFoundPets(int items, int currentPage, boolean typePost);	//DT get ret
 	ResponsePagesDto searchInfoOfLostOrFound(
@@ -24,7 +24,7 @@ public interface ILostFoundManagement {
 	ResponsePostDto updatePost(RequestLostFoundDto dto, String postId);						//D get ret tested
 	
 	//Dont need filter
-	ArrayList<ResponsePostDto> getUserDataListId(String[] posts);							//DT (Address->Location?)
+	ArrayList<ResponsePostDto> getUserDataListId(String[] posts);							//DT
 	String[] getTagsAndcolorsOfPicture(String imageLink);									//DT
 	
 }
