@@ -136,6 +136,18 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 		entity.setBreed(dto.breed);
 		entity.setAddress(dto.address);
 
+		if (Double.compare(dto.location.latitude, 0) == 0 || Double.compare(dto.location.longitude, 0) == 0) {
+			LocationDto locationFromAddress;
+
+			try {
+				locationFromAddress = addressToLocation(dto.address);
+			} catch (Exception e) {
+				throw new NoContentException();
+			}
+
+			dto.location = locationFromAddress;
+		}
+		
 		double[] res = new double[2];
 		res[0] = dto.location.longitude;
 		res[1] = dto.location.latitude;
