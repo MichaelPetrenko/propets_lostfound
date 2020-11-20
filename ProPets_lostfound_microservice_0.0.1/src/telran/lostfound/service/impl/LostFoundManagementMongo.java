@@ -91,22 +91,21 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 
 		LostFoundEntity entity = new LostFoundEntity(dto, lostOrFound, login);
 		repo.save(entity);
-		
+
 		String id = entity.getId();
-		
-		try { 
-			addPostToActivites(login, xToken, id); 
+		try {
+			addPostToActivites(login, xToken, id);
 		} catch (Exception e) {
+			e.getStackTrace();
 			if (e instanceof Forbidden) {
 				throw new ForbiddenException();
-			}
-			else if (e instanceof Unauthorized) {
+			} else if (e instanceof Unauthorized) {
+				System.out.println("if unauth case");
 				throw new BadTokenException();
-			}
-			else if (e instanceof BadRequest) {	
+			} else if (e instanceof BadRequest) {
 				throw new BadRequestException();
-			}
-			else throw new NotExistsException();
+			} else
+			throw new NotExistsException();
 		}
 
 		double[] coord = entity.getLocation();
@@ -117,35 +116,6 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 				new LocationDto(coord[0], coord[1]));
 
 		return resp;
-	}
-
-	private void addPostToActivites(String login, String xToken, String entityId) {
-		
-		String endpointAddActivity = "https://propets-me.herokuapp.com/" + 
-		"account/en/v1/" 
-				+ login 
-				+ "/activity/" //it's a {serviceName}
-				+ entityId;
-
-		URI uri;
-		try {
-			uri = new URI(endpointAddActivity);
-		} catch (Exception e) {
-			System.out.println("Error URI");
-			throw new BadURIException();
-		}
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-		headers.set("X-Token", xToken);
-		headers.set("X-ServiceName", "lostFound");
-
-
-		HttpEntity<Void> request = new HttpEntity<>(headers);
-		@SuppressWarnings("unused")
-		ResponseEntity<Void> responceFromAddUserActivity = 
-				restTemplate.exchange(uri, HttpMethod.PUT, request, Void.class);
 	}
 
 	@Override
@@ -208,7 +178,7 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 	}
 
 	@Override
-	public ResponsePostDto deletePostById(String postId) {
+	public ResponsePostDto deletePostById(String postId, String xToken) {
 		if (postId == null) {
 			throw new NotExistsException();
 		}
@@ -216,9 +186,82 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 		if (resp == null) {
 			throw new NotExistsException();
 		}
+		try {
+			removePostFromActivites(resp.userLogin, postId, xToken);
+		} catch (Exception e) {
+			e.getStackTrace();
+			if (e instanceof Forbidden) {
+				throw new ForbiddenException();
+			} else if (e instanceof Unauthorized) {
+				System.out.println("if unauth case");
+				throw new BadTokenException();
+			} else if (e instanceof BadRequest) {
+				throw new BadRequestException();
+			} else
+			throw new NotExistsException();
+		}
 		repo.deleteById(resp.id);
-//		void removeUserActivity(String email, String postID, String xServiceName);
 		return resp;
+	}
+
+	private void removePostFromActivites(String userLogin, String postId, String xToken) {
+		
+//		"/account/en/v1/{login}/activity/{id}";
+		String endpointRemoveActivity = 
+				"https://propets-me.herokuapp.com/" //accounting service
+				+ "account/en/v1/" 
+				+ userLogin 
+				+ "/activity/"																	
+				+ postId;
+
+		URI uri;
+		try {
+			uri = new URI(endpointRemoveActivity);
+		} catch (Exception e) {
+			System.out.println("Error URI");
+			throw new BadURIException();
+		}
+		
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+		headers.set("X-Token", xToken);
+		headers.set("X-ServiceName", "lostFound");
+		
+		HttpEntity<Void> request = new HttpEntity<>(headers);
+		@SuppressWarnings("unused")
+		ResponseEntity<Void> responceFromAddUserActivity = restTemplate.exchange(uri, HttpMethod.DELETE, request,
+				Void.class);
+		
+	}
+
+	private void addPostToActivites(String login, String xToken, String entityId) {
+
+		String endpointAddActivity = 
+				"https://propets-me.herokuapp.com/" 
+				+ "account/en/v1/" 
+				+ login 
+				+ "/activity/"																	
+				+ entityId;
+
+		URI uri;
+		try {
+			uri = new URI(endpointAddActivity);
+		} catch (Exception e) {
+			System.out.println("Error URI");
+			throw new BadURIException();
+		}
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+		headers.set("X-Token", xToken);
+		headers.set("X-ServiceName", "lostFound");
+
+		HttpEntity<Void> request = new HttpEntity<>(headers);
+		@SuppressWarnings("unused")
+		ResponseEntity<Void> responceFromAddUserActivity = restTemplate.exchange(uri, HttpMethod.PUT, request,
+				Void.class);
 	}
 
 	@Override

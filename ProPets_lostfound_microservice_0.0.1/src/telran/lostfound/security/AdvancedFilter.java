@@ -36,8 +36,15 @@ public class AdvancedFilter implements Filter{
 				response.sendError(401);
 				return;
 			}
-			TokenValidationRequestor tvr = new TokenValidationRequestor();
-			String[] credentials = tvr.decompileToken(xToken); 
+			TokenValidationRequestor tvr;
+			String[] credentials;
+			try {
+				tvr = new TokenValidationRequestor();
+				credentials = tvr.decompileToken(xToken);
+			} catch (Exception e1) {
+				response.sendError(401);
+				return;
+			} 
 			String id = request.getServletPath().split("/")[5];
 			ResponsePostDto post = new ResponsePostDto();
 			try {

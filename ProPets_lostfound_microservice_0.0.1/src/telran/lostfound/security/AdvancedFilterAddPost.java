@@ -39,7 +39,14 @@ public class AdvancedFilterAddPost implements Filter{
 				return;
 			}
 			TokenValidationRequestor tvr = new TokenValidationRequestor();
-			String[] credentials = tvr.decompileToken(xToken); 
+			String[] credentials;
+			try {
+				credentials = tvr.decompileToken(xToken);
+			} catch (Exception e1) {
+				response.sendError(401);
+				return;
+			}
+			
 			String login = request.getServletPath().split("/")[5];
 			String loginToken = credentials[0];
 			if(!login.equals(loginToken)) {

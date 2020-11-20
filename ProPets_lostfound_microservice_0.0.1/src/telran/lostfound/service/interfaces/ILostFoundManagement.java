@@ -20,7 +20,7 @@ public interface ILostFoundManagement {
 	ResponsePostDto postById(String postID); 												//DT get ret tested
 	
 	//Need another filter - checking author and roles
-	ResponsePostDto deletePostById(String postId);											//D get ret tested
+	ResponsePostDto deletePostById(String postId, String xToken);											//D get ret tested
 	ResponsePostDto updatePost(RequestLostFoundDto dto, String postId);						//D get ret tested
 	
 	//Dont need filter

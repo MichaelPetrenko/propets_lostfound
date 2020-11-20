@@ -69,8 +69,9 @@ public class LostfoundController {
 	
 //	"/lostfound/en/v1/{id}"
 	@DeleteMapping(value = LostFoundApiConstants.DELETE_POST_BY_ID)
-	ResponsePostDto deletePostById(@PathVariable("id") String id) {
-		return lostfound.deletePostById(id);
+	ResponsePostDto deletePostById(@PathVariable("id") String id, HttpServletRequest request) {
+		String xToken = request.getHeader("X-Token");
+		return lostfound.deletePostById(id, xToken);
 	}
 	
 //	"/lostfound/en/v1/{id}"
