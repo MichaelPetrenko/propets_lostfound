@@ -28,8 +28,8 @@ public class AdvancedFilter implements Filter{
 		HttpServletResponse response = (HttpServletResponse) resp;
 		String path = request.getServletPath();
 		
-		if (path.matches("/lostfound/en/v1/update/[^/]+")
-		 || path.matches("/lostfound/en/v1/delete/[^/]+")
+		if (path.matches("/en/v1/update/[^/]+")
+		 || path.matches("/en/v1/delete/[^/]+")
 		 ){
 			String xToken = request.getHeader("X-Token");
 			if(xToken==null || xToken=="") {
@@ -45,7 +45,7 @@ public class AdvancedFilter implements Filter{
 				response.sendError(401);
 				return;
 			} 
-			String id = request.getServletPath().split("/")[5];
+			String id = request.getServletPath().split("/")[4];
 			ResponsePostDto post = new ResponsePostDto();
 			try {
 				post = lostfound.postById(id);

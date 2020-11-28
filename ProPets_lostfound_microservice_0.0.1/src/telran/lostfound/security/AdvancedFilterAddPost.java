@@ -30,8 +30,8 @@ public class AdvancedFilterAddPost implements Filter{
 		if (//path.matches("/lostfound/en/v1/update/[^/]+")
 //		 || path.matches("/lostfound/en/v1/delete/[^/]+")
 //		 || 
-		 path.matches("/lostfound/en/v1/lost/[^/]+")
-		 || path.matches("/lostfound/en/v1/found/[^/]+")
+		 path.matches("/en/v1/lost/[^/]+")
+		 || path.matches("/en/v1/found/[^/]+")
 		 ){
 			String xToken = request.getHeader("X-Token");
 			if(xToken==null || xToken=="") {
@@ -47,7 +47,7 @@ public class AdvancedFilterAddPost implements Filter{
 				return;
 			}
 			
-			String login = request.getServletPath().split("/")[5];
+			String login = request.getServletPath().split("/")[4];
 			String loginToken = credentials[0];
 			if(!login.equals(loginToken)) {
 				response.sendError(400);

@@ -23,11 +23,11 @@ public class BasicFilter implements Filter {
 		String path = request.getServletPath();
 
 		if (
-		    path.matches("/lostfound/en/v1/losts")
-		 || path.matches("/lostfound/en/v1/founds")
-		 || path.matches("/lostfound/en/v1/founds/filter")
-		 || path.matches("/lostfound/en/v1/losts/filter")
-		 || path.matches("/lostfound/en/v1/post/[^/]+")
+		    path.matches("/en/v1/losts")
+		 || path.matches("/en/v1/founds")
+		 || path.matches("/en/v1/founds/filter")
+		 || path.matches("/en/v1/losts/filter")
+		 || path.matches("/en/v1/post/[^/]+")
 		 ) {
 
 				String xToken = request.getHeader("X-Token");
