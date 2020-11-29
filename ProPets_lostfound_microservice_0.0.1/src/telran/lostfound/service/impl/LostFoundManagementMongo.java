@@ -218,10 +218,9 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 
 	private void removePostFromActivites(String userLogin, String postId, String xToken) {
 		
-//		"/account/en/v1/{login}/activity/{id}";
 		String endpointRemoveActivity = 
-				"https://propets-me.herokuapp.com/" //accounting service
-				+ "account/en/v1/" 
+				"https://propets-me.herokuapp.com/"
+				+ "en/v1/" 
 				+ userLogin 
 				+ "/activity/"																	
 				+ postId;
