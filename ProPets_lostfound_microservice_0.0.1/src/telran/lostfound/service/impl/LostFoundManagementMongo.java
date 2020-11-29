@@ -251,7 +251,7 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 
 		String endpointAddActivity = 
 				"https://propets-me.herokuapp.com/" 
-				+ "account/en/v1/" 
+				+ "en/v1/" 
 				+ login 
 				+ "/activity/"																	
 				+ entityId;
