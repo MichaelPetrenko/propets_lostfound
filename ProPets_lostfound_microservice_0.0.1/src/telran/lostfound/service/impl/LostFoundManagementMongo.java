@@ -122,8 +122,7 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 				new LocationDto(coord[0], coord[1]));
 		
 		LostFoundKafkaDto lfoKafka = new LostFoundKafkaDto(resp, KafkaReqType.CREATE);
-		
-//		kafkaService.
+		kafkaService.addPost(lfoKafka);
 
 		return resp;
 	}
