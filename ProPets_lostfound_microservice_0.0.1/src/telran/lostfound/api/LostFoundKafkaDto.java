@@ -59,6 +59,23 @@ public class LostFoundKafkaDto {
 		this.address = dto.address;
 		this.location = dto.location;
 	}
+	
+	public LostFoundKafkaDto(ResponsePostDto dto, KafkaReqType kafkaReqType) {
+		this.kafkaReqType = kafkaReqType;
+		this.id = dto.id;
+		this.typePost = dto.typePost;
+		this.userLogin = dto.userLogin;
+		this.userName = dto.userName;
+		this.avatar = dto.avatar;
+		this.datePost = dto.datePost;
+		this.type = dto.type;
+		this.sex = dto.sex;
+		this.breed = dto.breed;
+		this.tags = dto.tags;
+		this.photos = dto.photos;
+		this.address = dto.address;
+		this.location = new LocationDto(dto.location[0], dto.location[1]);
+	}
 
 	@Override
 	public String toString() {
