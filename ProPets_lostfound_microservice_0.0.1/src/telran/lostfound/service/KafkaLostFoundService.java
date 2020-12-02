@@ -17,8 +17,6 @@ public class KafkaLostFoundService {
 	@Autowired
 	Source source;
 	
-	
-	
 	public String addPost(LostFoundKafkaDto post) {
 		source.output().send(MessageBuilder.withPayload(post).build());
 		return post + " " + LocalTime.now();

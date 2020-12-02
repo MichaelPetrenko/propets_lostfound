@@ -26,8 +26,10 @@ import org.springframework.web.client.HttpClientErrorException.Unauthorized;
 import telran.lostfound.api.codes.BadRequestException;
 import telran.lostfound.api.codes.BadTokenException;
 import telran.lostfound.api.codes.ForbiddenException;
+import telran.lostfound.api.KafkaReqType;
 import telran.lostfound.api.LocationDto;
 import telran.lostfound.api.LocationIQDto;
+import telran.lostfound.api.LostFoundKafkaDto;
 import telran.lostfound.api.ResponsePagesDto;
 import telran.lostfound.api.RequestLostFoundDto;
 import telran.lostfound.api.ResponseLostFoundDto;
@@ -45,6 +47,7 @@ import telran.lostfound.api.imaga.TagsApiResult;
 import telran.lostfound.dao.LostfoundRepository;
 import telran.lostfound.domain.entities.Address;
 import telran.lostfound.domain.entities.LostFoundEntity;
+import telran.lostfound.service.KafkaLostFoundService;
 import telran.lostfound.service.interfaces.ILostFoundManagement;
 
 @Service
@@ -59,6 +62,9 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 
 	@Autowired
 	RestTemplate restTemplate;
+	
+	@Autowired
+	KafkaLostFoundService kafkaService;
 
 	@Override
 	public ResponseLostFoundDto newLostOrFoundPet(RequestLostFoundDto dto, String login, boolean lostOrFound,
@@ -114,6 +120,10 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 				entity.getUserLogin(), entity.getUserName(), entity.getAvatar(), entity.getDatePost(), entity.getType(),
 				entity.getSex(), entity.getBreed(), entity.getTags(), entity.getPhotos(), entity.getAddress(),
 				new LocationDto(coord[0], coord[1]));
+		
+		LostFoundKafkaDto lfoKafka = new LostFoundKafkaDto(resp, KafkaReqType.CREATE);
+		
+//		kafkaService.
 
 		return resp;
 	}
