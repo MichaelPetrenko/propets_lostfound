@@ -166,6 +166,9 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 		repo.save(entity);
 
 		ResponsePostDto req = new ResponsePostDto(entity);
+//		LostFoundKafkaDto lfoKafka = new LostFoundKafkaDto(req, KafkaReqType.UPDATE);
+//		kafkaService.addPost(lfoKafka);
+		//TODO
 		return req;
 	}
 
@@ -222,6 +225,9 @@ public class LostFoundManagementMongo implements ILostFoundManagement {
 			throw new NotExistsException();
 		}
 		repo.deleteById(resp.id);
+//		LostFoundKafkaDto lfoKafka = new LostFoundKafkaDto(resp, KafkaReqType.DELETE);
+//		kafkaService.addPost(lfoKafka);
+		//TODO
 		return resp;
 	}
 
