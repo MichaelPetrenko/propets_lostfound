@@ -1,5 +1,7 @@
 package telran.lostfound.api;
 
+import java.util.Arrays;
+
 import telran.lostfound.domain.entities.Address;
 
 public class LostFoundKafkaDto {
@@ -57,5 +59,15 @@ public class LostFoundKafkaDto {
 		this.address = dto.address;
 		this.location = dto.location;
 	}
+
+	@Override
+	public String toString() {
+		return "LostFoundKafkaDto [id=" + id + ", kafkaReqType=" + kafkaReqType + ", typePost=" + typePost
+				+ ", userLogin=" + userLogin + ", userName=" + userName + ", avatar=" + avatar + ", datePost="
+				+ datePost + ", type=" + type + ", sex=" + sex + ", breed=" + breed + ", tags=" + Arrays.toString(tags)
+				+ ", photos=" + Arrays.toString(photos) + ", address=" + address + ", location=" + location + "]";
+	}
+	
+	
 
 }
