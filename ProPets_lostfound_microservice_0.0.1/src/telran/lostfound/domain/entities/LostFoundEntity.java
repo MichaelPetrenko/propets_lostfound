@@ -12,6 +12,7 @@ import telran.lostfound.api.RequestLostFoundDto;
 public class LostFoundEntity {
 	
 	@Id
+	//@GeneratedValue
 	private String id;
 	private boolean typePost;
 	private String userLogin;
