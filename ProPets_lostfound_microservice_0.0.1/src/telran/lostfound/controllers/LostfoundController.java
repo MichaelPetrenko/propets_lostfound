@@ -103,11 +103,4 @@ public class LostfoundController {
 	ResponsePagesDto searchInfoOrFound(@RequestBody RequestSearchDto dto, @RequestParam int currentPage, @RequestParam int itemsOnPage) {
 		return lostfound.searchInfoOfLostOrFound(dto, itemsOnPage, currentPage, true);
 	}
-	
-	// "/wakeup"
-	@GetMapping(value = LostFoundApiConstants.WAKEUP)
-	void wakeUp() {
-		return;
-	}
-	
 }

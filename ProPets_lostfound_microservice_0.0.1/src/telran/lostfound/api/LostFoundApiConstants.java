@@ -21,6 +21,5 @@ public interface LostFoundApiConstants {
 //	String TAGS_AND_COLORS_OF_PICTURE = 		"/lostfound/en/v1/tagscolors/?image_url=URL";
 	
 	String GET_USER_DATA_LIST_ID = 				"/en/v1/userdata";
-	String WAKEUP = 							"/wakeup";
 
 }
