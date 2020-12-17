@@ -104,4 +104,10 @@ public class LostfoundController {
 		return lostfound.searchInfoOfLostOrFound(dto, itemsOnPage, currentPage, true);
 	}
 	
+	// "/wakeup"
+	@GetMapping(value = LostFoundApiConstants.WAKEUP)
+	void wakeUp() {
+		return;
+	}
+	
 }
