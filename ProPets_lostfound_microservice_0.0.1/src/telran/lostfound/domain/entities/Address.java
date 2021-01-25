@@ -23,5 +23,5 @@ public class Address {
 	public String toString() {
 		return street.replace(" ", "+")+","+building.replace(" ", "+")+","+city.replace(" ", "+")+","+country.replace(" ", "+");
 	}
-
+ 
 }
